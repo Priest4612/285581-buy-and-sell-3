@@ -1,11 +1,19 @@
 'use strict';
 const fs = require(`fs`);
+const path = require(`path`);
+
 const {Utils} = require(`../../utils`);
 const {getRandomInt, shuffle} = Utils;
+const {ExitCode} = require(`../../constants`);
+const {PROJECT_DIR} = require(`../../../settings`);
 
-const DEFAULT_COUNT = 1;
-const MAX_COUNT = 1000;
-const FILE_NAME = `mock.json`;
+const offerRestrict = {
+  DEFAULT_COUNT: 1,
+  MAX_COUNT: 1000,
+};
+
+
+const FILE_NAME = path.join(PROJECT_DIR, `mock.json`);
 
 const TITLES = [
   `Продам книги Стивена Кинга.`,
@@ -52,25 +60,27 @@ const OfferType = {
 };
 
 const SumRestrict = {
-  min: 1000,
-  max: 100000,
+  MIN: 1000,
+  MAX: 100000,
 };
 
 const PictureRestrict = {
-  min: 1,
-  max: 16,
+  MIN: 1,
+  MAX: 16,
 };
 
 const getPictureFileName = (number) => number > 10 ? `item${number}.jpg` : `item0${number}.jpg`;
 
+const getRandomElement = (array) => array[getRandomInt(0, array.length - 1)];
+
 const generateOffers = (count) => {
   return Array(count).fill({}).map(() => ({
-    category: [CATEGORIES[getRandomInt(0, CATEGORIES.length - 1)]],
-    description: shuffle(SENTENCES).slice(1, 5).join(` `),
-    picture: getPictureFileName(getRandomInt(PictureRestrict.min, PictureRestrict.max)),
-    title: TITLES[getRandomInt(0, TITLES.length - 1)],
     type: Object.keys(OfferType)[getRandomInt(0, Object.keys(OfferType).length - 1)],
-    sum: getRandomInt(SumRestrict.min, SumRestrict.max),
+    title: getRandomElement(TITLES),
+    description: shuffle(SENTENCES).slice(1, 5).join(` `),
+    sum: getRandomInt(SumRestrict.MIN, SumRestrict.MAX),
+    picture: getPictureFileName(getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)),
+    category: [getRandomElement(CATEGORIES)],
   }));
 };
 
@@ -78,19 +88,21 @@ module.exports = {
   name: `--generate`,
   run(args) {
     const [count] = args;
-    const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
+    const countOffer = Number.parseInt(count, 10) || offerRestrict.DEFAULT_COUNT;
 
-    if (countOffer <= MAX_COUNT) {
+    if (countOffer <= offerRestrict.MAX_COUNT) {
       const content = JSON.stringify(generateOffers(countOffer));
       fs.writeFile(FILE_NAME, content, (err) => {
+        console.log(process.env.INIT_CWD);
         if (err) {
-          return console.error(`Can't write data file...`);
+          console.error(`Can't write data file...`);
+          return process.exit(ExitCode.ERROR);
         }
-
         return console.log(`Operation success. File created.`);
       });
     } else {
       console.log(`Не больше 1000 объявлений.`);
+      process.exit(ExitCode.ERROR);
     }
   }
 };
