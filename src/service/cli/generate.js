@@ -1,5 +1,6 @@
 'use strict';
-const fs = require(`fs`);
+const chalk = require(`chalk`);
+const fs = require(`fs`).promises;
 const path = require(`path`);
 
 const {Utils} = require(`../../utils`);
@@ -86,22 +87,22 @@ const generateOffers = (count) => {
 
 module.exports = {
   name: `--generate`,
-  run(args) {
+  async run(args) {
     const [count] = args;
     const countOffer = Number.parseInt(count, 10) || offerRestrict.DEFAULT_COUNT;
 
     if (countOffer <= offerRestrict.MAX_COUNT) {
       const content = JSON.stringify(generateOffers(countOffer));
-      fs.writeFile(FILE_NAME, content, (err) => {
-        console.log(process.env.INIT_CWD);
-        if (err) {
-          console.error(`Can't write data file...`);
-          return process.exit(ExitCode.ERROR);
-        }
-        return console.log(`Operation success. File created.`);
-      });
+      try {
+        await fs.writeFile(FILE_NAME, content);
+        console.log(chalk.green(`Operation success. File created.`));
+        process.exit(ExitCode.SUCCESS);
+      } catch (err) {
+        console.error(chalk.red(`Can't write data file...`));
+        process.exit(ExitCode.ERROR);
+      }
     } else {
-      console.log(`Не больше 1000 объявлений.`);
+      console.error(chalk.red(`Не больше ${offerRestrict.MAX_COUNT} объявлений.`));
       process.exit(ExitCode.ERROR);
     }
   }
