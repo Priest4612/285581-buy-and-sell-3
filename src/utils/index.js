@@ -1,13 +1,13 @@
 'use strict';
 
+
 const getRandomInt = require(`./get-random-int`);
 const shuffle = require(`./shuffle`);
+const fileUtils = require(`./file-utils`);
 
-const Utils = {
-  getRandomInt,
-  shuffle,
-};
 
 module.exports = {
-  Utils,
+  fileUtils,
+  getRandomInt,
+  shuffle,
 };
