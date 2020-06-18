@@ -10,7 +10,7 @@ const readFileToArray = async (filePath) => {
     return content.split(`\n`);
   } catch (err) {
     console.error(chalk.red(err));
-    process.exit(ExitCode.ERROR);
+    return process.exit(ExitCode.ERROR);
   }
 };
 
