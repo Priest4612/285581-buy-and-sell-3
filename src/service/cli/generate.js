@@ -1,11 +1,11 @@
 'use strict';
 const chalk = require(`chalk`);
 const path = require(`path`);
-const util = require(`util`);
 
 const {getRandomInt, arrayUtils, fileUtils} = require(`../../utils`);
 const {ExitCode} = require(`../../constants`);
 const {PROJECT_DIR} = require(`../../../settings`);
+
 
 const offerRestrict = {
   DEFAULT_COUNT: 1,
@@ -35,11 +35,10 @@ const PictureRestrict = {
   MAX: 16,
 };
 
+
 const getPictureFileName = (number) => number > 10 ? `item${number}.jpg` : `item0${number}.jpg`;
 
-const readContent = util.promisify(fileUtils.readFileToArray);
-const saveMock = util.promisify(fileUtils.writeFileJSON);
-/* const readContent = async (filePath) => {
+const readContent = async (filePath) => {
   try {
     return await fileUtils.readFileToArray(filePath);
   } catch (err) {
@@ -56,7 +55,7 @@ const saveMock = async (fileName, content) => {
     console.error(chalk.red(err));
     process.exit(ExitCode.ERROR);
   }
-}; */
+};
 
 const generateOffers = (count, title, sentences, categories) => {
   return Array(count).fill({}).map(() => ({
@@ -75,21 +74,9 @@ module.exports = {
     const [count] = args;
     const countOffer = Number.parseInt(count, 10) || offerRestrict.DEFAULT_COUNT;
 
-    const title = await readContent(FILE_TITLES_PATH)
-      .catch((err) => {
-        console.error(chalk.red(err));
-        process.exit(ExitCode.ERROR);
-      });
-    const sentences = await readContent(FILE_SENTENCES_PATH)
-      .catch((err) => {
-        console.error(chalk.red(err));
-        process.exit(ExitCode.ERROR);
-      });
-    const categories = await readContent(FILE_CATEGORIES_PATH)
-      .catch((err) => {
-        console.error(chalk.red(err));
-        process.exit(ExitCode.ERROR);
-      });
+    const title = await readContent(FILE_TITLES_PATH);
+    const sentences = await readContent(FILE_SENTENCES_PATH);
+    const categories = await readContent(FILE_CATEGORIES_PATH);
 
     if (countOffer <= offerRestrict.MAX_COUNT) {
       await saveMock(FILE_NAME, generateOffers(countOffer, title, sentences, categories));
