@@ -1,9 +1,9 @@
 'use strict';
 const chalk = require(`chalk`);
 const path = require(`path`);
+const util = require(`util`);
 
-const Utils = require(`../../utils`);
-const {getRandomInt, shuffle, fileUtils} = Utils;
+const {getRandomInt, arrayUtils, fileUtils} = require(`../../utils`);
 const {ExitCode} = require(`../../constants`);
 const {PROJECT_DIR} = require(`../../../settings`);
 
@@ -37,16 +37,35 @@ const PictureRestrict = {
 
 const getPictureFileName = (number) => number > 10 ? `item${number}.jpg` : `item0${number}.jpg`;
 
-const getRandomElement = (array) => array[getRandomInt(0, array.length - 1)];
+const readContent = util.promisify(fileUtils.readFileToArray);
+const saveMock = util.promisify(fileUtils.writeFileJSON);
+/* const readContent = async (filePath) => {
+  try {
+    return await fileUtils.readFileToArray(filePath);
+  } catch (err) {
+    console.error(chalk.red(err));
+    return process.exit(ExitCode.ERROR);
+  }
+};
+
+const saveMock = async (fileName, content) => {
+  try {
+    await fileUtils.writeFileJSON(fileName, content);
+    console.log(chalk.green(`Operation success. File created.`));
+  } catch (err) {
+    console.error(chalk.red(err));
+    process.exit(ExitCode.ERROR);
+  }
+}; */
 
 const generateOffers = (count, title, sentences, categories) => {
   return Array(count).fill({}).map(() => ({
     type: Object.keys(OfferType)[getRandomInt(0, Object.keys(OfferType).length - 1)],
-    title: getRandomElement(title),
-    description: shuffle(sentences).slice(1, 5).join(` `),
+    title: arrayUtils.getOneRandomElement(title),
+    description: arrayUtils.getRandomElements(sentences).join(` `),
     sum: getRandomInt(SumRestrict.MIN, SumRestrict.MAX),
     picture: getPictureFileName(getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)),
-    category: [getRandomElement(categories)],
+    category: arrayUtils.getRandomElements(categories),
   }));
 };
 
@@ -56,12 +75,24 @@ module.exports = {
     const [count] = args;
     const countOffer = Number.parseInt(count, 10) || offerRestrict.DEFAULT_COUNT;
 
-    const title = await fileUtils.readFileToArray(FILE_TITLES_PATH);
-    const sentences = await fileUtils.readFileToArray(FILE_SENTENCES_PATH);
-    const categories = await fileUtils.readFileToArray(FILE_CATEGORIES_PATH);
+    const title = await readContent(FILE_TITLES_PATH)
+      .catch((err) => {
+        console.error(chalk.red(err));
+        process.exit(ExitCode.ERROR);
+      });
+    const sentences = await readContent(FILE_SENTENCES_PATH)
+      .catch((err) => {
+        console.error(chalk.red(err));
+        process.exit(ExitCode.ERROR);
+      });
+    const categories = await readContent(FILE_CATEGORIES_PATH)
+      .catch((err) => {
+        console.error(chalk.red(err));
+        process.exit(ExitCode.ERROR);
+      });
 
     if (countOffer <= offerRestrict.MAX_COUNT) {
-      await fileUtils.writeFileJSON(FILE_NAME, generateOffers(countOffer, title, sentences, categories));
+      await saveMock(FILE_NAME, generateOffers(countOffer, title, sentences, categories));
     } else {
       console.error(chalk.red(`Не больше ${offerRestrict.MAX_COUNT} объявлений.`));
       process.exit(ExitCode.ERROR);

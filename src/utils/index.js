@@ -2,12 +2,12 @@
 
 
 const getRandomInt = require(`./get-random-int`);
-const shuffle = require(`./shuffle`);
+const arrayUtils = require(`./array-utils`);
 const fileUtils = require(`./file-utils`);
 
 
 module.exports = {
   fileUtils,
   getRandomInt,
-  shuffle,
+  arrayUtils,
 };
