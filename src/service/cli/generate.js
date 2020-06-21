@@ -1,4 +1,5 @@
 'use strict';
+
 const chalk = require(`chalk`);
 const path = require(`path`);
 
@@ -40,10 +41,9 @@ const getPictureFileName = (number) => number > 10 ? `item${number}.jpg` : `item
 
 const readContent = async (filePath) => {
   try {
-    return await fileUtils.readFileToArray(filePath);
+    return await fileUtils.readTextFileToArray(filePath);
   } catch (err) {
-    console.error(chalk.red(err));
-    return process.exit(ExitCode.ERROR);
+    throw err;
   }
 };
 
@@ -53,7 +53,7 @@ const saveMock = async (fileName, content) => {
     console.log(chalk.green(`Operation success. File created.`));
   } catch (err) {
     console.error(chalk.red(err));
-    process.exit(ExitCode.ERROR);
+    throw err;
   }
 };
 
@@ -71,18 +71,22 @@ const generateOffers = (count, title, sentences, categories) => {
 module.exports = {
   name: `--generate`,
   async run(args) {
-    const [count] = args;
-    const countOffer = Number.parseInt(count, 10) || offerRestrict.DEFAULT_COUNT;
+    try {
+      const [count] = args;
+      const countOffer = Number.parseInt(count, 10) || offerRestrict.DEFAULT_COUNT;
 
-    const title = await readContent(FILE_TITLES_PATH);
-    const sentences = await readContent(FILE_SENTENCES_PATH);
-    const categories = await readContent(FILE_CATEGORIES_PATH);
+      const title = await readContent(FILE_TITLES_PATH);
+      const sentences = await readContent(FILE_SENTENCES_PATH);
+      const categories = await readContent(FILE_CATEGORIES_PATH);
 
-    if (countOffer <= offerRestrict.MAX_COUNT) {
+      if (countOffer > offerRestrict.MAX_COUNT) {
+        console.error(chalk.red(`Не больше ${offerRestrict.MAX_COUNT} объявлений.`));
+        process.exit(ExitCode.ERROR);
+      }
+
       await saveMock(FILE_NAME, generateOffers(countOffer, title, sentences, categories));
-    } else {
-      console.error(chalk.red(`Не больше ${offerRestrict.MAX_COUNT} объявлений.`));
-      process.exit(ExitCode.ERROR);
+    } catch (err) {
+      console.error(chalk.red(err));
     }
   }
 };
