@@ -6,7 +6,9 @@
   "scripts": {
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/",
-    "start": "node ./src/service/service.js"
+    "start": "node ./src/service/service.js",
+    "server": "nodemon ./src/service/service.js --server",
+    "generate": "node ./src/service/service.js --generate"
   },
   "repository": {
     "type": "git",
@@ -20,7 +22,8 @@
   "homepage": "https://github.com/Priest4612/285581-buy-and-sell-3#readme",
   "devDependencies": {
     "eslint": "7.2.0",
-    "eslint-config-htmlacademy": "0.5.2"
+    "eslint-config-htmlacademy": "0.5.2",
+    "nodemon": "2.0.4"
   },
   "dependencies": {
     "chalk": "4.1.0"

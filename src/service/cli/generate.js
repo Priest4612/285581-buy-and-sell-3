@@ -1,4 +1,5 @@
 'use strict';
+
 const chalk = require(`chalk`);
 const path = require(`path`);
 
@@ -7,7 +8,7 @@ const {ExitCode} = require(`../../constants`);
 const {PROJECT_DIR} = require(`../../../settings`);
 
 
-const offerRestrict = {
+const OfferRestrict = {
   DEFAULT_COUNT: 1,
   MAX_COUNT: 1000,
 };
@@ -38,25 +39,6 @@ const PictureRestrict = {
 
 const getPictureFileName = (number) => number > 10 ? `item${number}.jpg` : `item0${number}.jpg`;
 
-const readContent = async (filePath) => {
-  try {
-    return await fileUtils.readFileToArray(filePath);
-  } catch (err) {
-    console.error(chalk.red(err));
-    return process.exit(ExitCode.ERROR);
-  }
-};
-
-const saveMock = async (fileName, content) => {
-  try {
-    await fileUtils.writeFileJSON(fileName, content);
-    console.log(chalk.green(`Operation success. File created.`));
-  } catch (err) {
-    console.error(chalk.red(err));
-    process.exit(ExitCode.ERROR);
-  }
-};
-
 const generateOffers = (count, title, sentences, categories) => {
   return Array(count).fill({}).map(() => ({
     type: Object.keys(OfferType)[getRandomInt(0, Object.keys(OfferType).length - 1)],
@@ -71,17 +53,23 @@ const generateOffers = (count, title, sentences, categories) => {
 module.exports = {
   name: `--generate`,
   async run(args) {
-    const [count] = args;
-    const countOffer = Number.parseInt(count, 10) || offerRestrict.DEFAULT_COUNT;
+    try {
+      const [count] = args;
+      const countOffer = Number.parseInt(count, 10) || OfferRestrict.DEFAULT_COUNT;
 
-    const title = await readContent(FILE_TITLES_PATH);
-    const sentences = await readContent(FILE_SENTENCES_PATH);
-    const categories = await readContent(FILE_CATEGORIES_PATH);
+      const title = await fileUtils.readTextFileToArray(FILE_TITLES_PATH);
+      const sentences = await fileUtils.readTextFileToArray(FILE_SENTENCES_PATH);
+      const categories = await fileUtils.readTextFileToArray(FILE_CATEGORIES_PATH);
 
-    if (countOffer <= offerRestrict.MAX_COUNT) {
-      await saveMock(FILE_NAME, generateOffers(countOffer, title, sentences, categories));
-    } else {
-      console.error(chalk.red(`Не больше ${offerRestrict.MAX_COUNT} объявлений.`));
+      if (countOffer > OfferRestrict.MAX_COUNT) {
+        console.error(chalk.red(`Не больше ${OfferRestrict.MAX_COUNT} объявлений.`));
+        process.exit(ExitCode.ERROR);
+      }
+
+      await fileUtils.writeFileJSON(FILE_NAME, generateOffers(countOffer, title, sentences, categories));
+      console.log(chalk.green(`Operation success. File created.`));
+    } catch (err) {
+      console.error(chalk.red(err));
       process.exit(ExitCode.ERROR);
     }
   }
