@@ -5,7 +5,7 @@ const path = require(`path`);
 const http = require(`http`);
 
 const {fileUtils} = require(`../../utils`);
-const {HttpCode} = require(`../../constants`);
+const {HttpStatusCode} = require(`../../constants`);
 const {PROJECT_DIR} = require(`../../../settings`);
 
 const DEFAULT_PORT = 3000;
@@ -43,14 +43,14 @@ const onClientContent = async (req, res) => {
       try {
         const mocks = await fileUtils.readJsonFileToArray(path.join(PROJECT_DIR, FILE_NAME));
         const message = mocks.map((post) => `<li>${post.title}</li>`).join(``);
-        sendResponse(res, HttpCode.OK, `<ul>${message}</ul>`);
+        sendResponse(res, HttpStatusCode.OK, `<ul>${message}</ul>`);
       } catch (err) {
-        sendResponse(res, HttpCode.NOT_FOUND, notFoundMessageText);
+        sendResponse(res, HttpStatusCode.NOT_FOUND, notFoundMessageText);
       }
       break;
 
     default:
-      sendResponse(res, HttpCode.NOT_FOUND, notFoundMessageText);
+      sendResponse(res, HttpStatusCode.NOT_FOUND, notFoundMessageText);
       break;
   }
 };
