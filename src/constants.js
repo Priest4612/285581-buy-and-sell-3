@@ -6,7 +6,7 @@ const ExitCode = {
   SUCCESS: 0,
   ERROR: 1,
 };
-const HttpCode = {
+const HttpStatusCode = {
   OK: 200,
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
@@ -18,5 +18,5 @@ module.exports = {
   USER_ARGV_INDEX,
   DEFAULT_COMMAND,
   ExitCode,
-  HttpCode,
+  HttpStatusCode,
 };
