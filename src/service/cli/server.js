@@ -24,7 +24,7 @@ app.get(`/offers`, async (req, res) => {
 });
 
 app.use((req, res) => res.status(HttpStatusCode.NOT_FOUND).send(`Not found`));
-app.use((error, req, res, _next) => res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).render(`errors/500`));
+app.use((error, req, res, _next) => res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(`errors/500`));
 
 module.exports = {
   name: `--server`,
