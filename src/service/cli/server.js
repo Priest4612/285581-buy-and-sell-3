@@ -2,7 +2,7 @@
 
 const chalk = require(`chalk`);
 const path = require(`path`);
-const http = require(`http`);
+const express = require(`express`);
 
 const {fileUtils} = require(`../../utils`);
 const {HttpStatusCode} = require(`../../constants`);
@@ -11,49 +11,23 @@ const {PROJECT_DIR} = require(`../../../settings`);
 const DEFAULT_PORT = 3000;
 const FILE_NAME = `mock.json`;
 
+const app = express();
+app.use(express.json());
 
-const sendResponse = (res, statusCode, message) => {
-  const template = `
-  <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>With love from Node</title>
-    </head>
-    <body>
-      ${message}
-    </body>
-  </html>
-  `.trim();
+const router = new express.Router();
 
-  res.statusCode = statusCode;
-  res.writeHead(statusCode, {
-    'Content-Type': `text/html; charset=UTF-8`,
-  });
-
-  res.end(template);
-};
-
-const onClientContent = async (req, res) => {
-  const notFoundMessageText = `Not found`;
-
-  switch (req.url) {
-    case `/`:
-      try {
-        const mocks = await fileUtils.readJsonFileToArray(path.join(PROJECT_DIR, FILE_NAME));
-        const message = mocks.map((post) => `<li>${post.title}</li>`).join(``);
-        sendResponse(res, HttpStatusCode.OK, `<ul>${message}</ul>`);
-      } catch (err) {
-        sendResponse(res, HttpStatusCode.NOT_FOUND, notFoundMessageText);
-      }
-      break;
-
-    default:
-      sendResponse(res, HttpStatusCode.NOT_FOUND, notFoundMessageText);
-      break;
+router.get(`/offers`, async (req, res) => {
+  try {
+    const offers = await fileUtils.readJsonFileToArray(path.join(PROJECT_DIR, FILE_NAME));
+    res.json(offers);
+  } catch (err) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(err);
   }
-};
+});
+
+app.use(router);
+app.use((req, res) => res.status(HttpStatusCode.NOT_FOUND).send(`Not found`));
+app.use((error, req, res, _next) => res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(`INTERNAL_SERVER_ERROR`));
 
 module.exports = {
   name: `--server`,
@@ -61,12 +35,6 @@ module.exports = {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
-    http.createServer(onClientContent)
-      .listen(port).on(`listening`, (err) => {
-        if (err) {
-          return console.log(`Ошибка при создании сервера`, err);
-        }
-        return console.info(chalk.gray(`Ожидаю соединений на порт ${port}`));
-      });
+    app.listen(port, () => console.info(chalk.green(`Принимаю подключения на ${ port }`)));
   }
 };
