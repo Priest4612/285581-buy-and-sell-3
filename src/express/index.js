@@ -21,7 +21,7 @@ app.use(express.static(path.resolve(PROJECT_DIR, PUBLIC_DIR)));
 
 app.use(`/`, mainRouter);
 app.use((req, res) => res.status(HttpStatusCode.NOT_FOUND).render(`errors/404`));
-app.use((error, req, res) => res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).render(`errors/500`));
+app.use((error, req, res, _next) => res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).render(`errors/500`));
 
 app.listen(DEFAULT_PORT,
     () => console.log(`Сервер запущен на порту: ${DEFAULT_PORT}`));
