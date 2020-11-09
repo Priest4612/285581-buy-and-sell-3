@@ -14,7 +14,9 @@ const FILE_NAME = `mock.json`;
 const app = express();
 app.use(express.json());
 
-app.get(`/offers`, async (req, res) => {
+const router = new express.Router();
+
+router.get(`/offers`, async (req, res) => {
   try {
     const offers = await fileUtils.readJsonFileToArray(path.join(PROJECT_DIR, FILE_NAME));
     res.json(offers);
@@ -23,6 +25,7 @@ app.get(`/offers`, async (req, res) => {
   }
 });
 
+app.use(router);
 app.use((req, res) => res.status(HttpStatusCode.NOT_FOUND).send(`Not found`));
 app.use((error, req, res, _next) => res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(`INTERNAL_SERVER_ERROR`));
 
