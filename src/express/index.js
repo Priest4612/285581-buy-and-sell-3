@@ -7,7 +7,7 @@ const {mainRouter} = require(`./routes/main-routes`);
 const {HttpStatusCode} = require(`../constants.js`);
 
 // Инициализация сервера...
-const DEFAULT_PORT = settings.DEFAULT_PORT;
+const DEFAULT_PORT = settings.DEFAULT_PORT_FRONT;
 const PROJECT_DIR = settings.PROJECT_DIR;
 const PUBLIC_DIR = settings.PUBLIC_DIR;
 const TEMPLATES_DIR = settings.TEMPLATES_DIR;
