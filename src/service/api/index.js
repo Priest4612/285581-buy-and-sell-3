@@ -25,6 +25,4 @@ const app = new Router();
 })();
 
 
-module.exports = {
-  app,
-};
+module.exports = app;

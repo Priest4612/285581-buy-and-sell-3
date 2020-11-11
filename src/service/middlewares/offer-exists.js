@@ -12,7 +12,7 @@ const offerExists = (service) => (req, res, next) => {
   }
 
   res.locals.offer = offer;
-  return next;
+  return next();
 };
 
 

@@ -34,7 +34,7 @@ class OfferService {
     return this._offers;
   }
 
-  findOde(id) {
+  findOne(id) {
     return this._offers
       .find((item) => item.id === id);
   }

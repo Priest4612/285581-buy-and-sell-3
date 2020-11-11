@@ -49,7 +49,7 @@ const getPictureFileName = (number) => number > 10 ? `item${number}.jpg` : `item
 const generateComments = (count, comments) => {
   return Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
-    text: arrayUtils.getRandomElements(comments, CommentsReatrict.MIN, CommentsReatrict.MAX).join(` `),
+    text: arrayUtils.getOneRandomElement(comments),
   }));
 };
 
@@ -62,7 +62,7 @@ const generateOffers = (count, title, sentences, categories, comments) => {
     sum: getRandomInt(SumRestrict.MIN, SumRestrict.MAX),
     picture: getPictureFileName(getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)),
     category: arrayUtils.getRandomElements(categories),
-    comments: generateComments(getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX), comments),
+    comments: generateComments(getRandomInt(CommentsReatrict.MIN, CommentsReatrict.MAX), comments),
   }));
 };
 
