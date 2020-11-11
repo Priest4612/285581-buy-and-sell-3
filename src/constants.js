@@ -14,9 +14,12 @@ const HttpStatusCode = {
   UNAUTHORIZED: 401,
 };
 
+const MAX_ID_LENGTH = 6;
+
 module.exports = {
   USER_ARGV_INDEX,
   DEFAULT_COMMAND,
   ExitCode,
   HttpStatusCode,
+  MAX_ID_LENGTH,
 };
