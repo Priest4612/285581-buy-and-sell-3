@@ -9,12 +9,12 @@ class CommentService {
       id: nanoid(MAX_ID_LENGTH),
     }, comment);
 
-    offer.comment.push(newComment);
+    offer.comments.push(newComment);
     return comment;
   }
 
   drop(offer, commentId) {
-    const dropComment = offer.comment
+    const dropComment = offer.comments
       .find((item) => item.id === commentId);
 
     if (!dropComment) {

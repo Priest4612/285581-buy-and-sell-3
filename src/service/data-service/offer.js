@@ -24,7 +24,7 @@ class OfferService {
       return null;
     }
 
-    this._offers = this.offers
+    this._offers = this._offers
       .filter((item) => item.id !== id);
 
     return offer;

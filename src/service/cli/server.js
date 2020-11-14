@@ -20,7 +20,7 @@ app.use((req, res) => res
 
 app.use((error, req, res, _next) => res
   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-  .send(`INTERNAL_SERVER_ERROR`));
+  .send(`INTERNAL_SERVER_ERROR: ${error.message}`));
 
 
 module.exports = {

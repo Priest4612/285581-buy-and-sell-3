@@ -16,3 +16,4 @@ build/
 
 mock.json
 src/test
+test.http
