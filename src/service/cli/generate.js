@@ -8,13 +8,6 @@ const {getRandomInt, arrayUtils, fileUtils} = require(`../../utils`);
 const {ExitCode, MAX_ID_LENGTH} = require(`../../constants`);
 const {PROJECT_DIR} = require(`../../../settings`);
 
-
-const OfferRestrict = {
-  DEFAULT_COUNT: 1,
-  MAX_COUNT: 1000,
-};
-
-
 const ROOT_PATH = PROJECT_DIR;
 const FILE_NAME = path.join(ROOT_PATH, `mock.json`);
 
@@ -23,6 +16,12 @@ const FILE_TITLES_PATH = path.join(DATA_PATH, `titles.txt`);
 const FILE_SENTENCES_PATH = path.join(DATA_PATH, `sentences.txt`);
 const FILE_CATEGORIES_PATH = path.join(DATA_PATH, `categories.txt`);
 const FILE_COMMENTS_PATH = path.join(DATA_PATH, `comments.txt`);
+
+
+const OfferRestrict = {
+  DEFAULT_COUNT: 1,
+  MAX_COUNT: 1000,
+};
 
 const OfferType = {
   offer: `offer`,
@@ -53,7 +52,9 @@ const generateComments = (count, comments) => {
   }));
 };
 
-const generateOffers = (count, title, sentences, categories, comments) => {
+const generateOffers = (count, options) => {
+  const {title, sentences, categories, comments} = options;
+
   return Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     type: Object.keys(OfferType)[getRandomInt(0, Object.keys(OfferType).length - 1)],
@@ -74,17 +75,20 @@ module.exports = {
       const [count] = args;
       const countOffer = Number.parseInt(count, 10) || OfferRestrict.DEFAULT_COUNT;
 
-      const title = await fileUtils.readTextFileToArray(FILE_TITLES_PATH);
-      const sentences = await fileUtils.readTextFileToArray(FILE_SENTENCES_PATH);
-      const categories = await fileUtils.readTextFileToArray(FILE_CATEGORIES_PATH);
-      const comments = await fileUtils.readTextFileToArray(FILE_COMMENTS_PATH);
+      const options = {
+        title: await fileUtils.readTextFileToArray(FILE_TITLES_PATH),
+        sentences: await fileUtils.readTextFileToArray(FILE_SENTENCES_PATH),
+        categories: await fileUtils.readTextFileToArray(FILE_CATEGORIES_PATH),
+        comments: await fileUtils.readTextFileToArray(FILE_COMMENTS_PATH),
+      };
+
 
       if (countOffer > OfferRestrict.MAX_COUNT) {
         console.error(chalk.red(`Не больше ${OfferRestrict.MAX_COUNT} объявлений.`));
         process.exit(ExitCode.ERROR);
       }
 
-      await fileUtils.writeFileJSON(FILE_NAME, generateOffers(countOffer, title, sentences, categories, comments));
+      await fileUtils.writeFileJSON(FILE_NAME, generateOffers(countOffer, options));
       console.log(chalk.green(`Operation success. File created.`));
     } catch (err) {
       console.error(chalk.red(err));
