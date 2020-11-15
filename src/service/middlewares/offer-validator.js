@@ -2,7 +2,7 @@
 
 const {HttpStatusCode} = require(`../../constants.js`);
 
-const offerKeys = [`type`, `title`, `description`, `sum`, `picture`];
+const offerKeys = [`type`, `title`, `description`, `sum`, `picture`, `category`];
 
 const offerValidator = (req, res, next) => {
   const newOffer = req.body;

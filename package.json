@@ -4,7 +4,8 @@
   "description": "Куплю. Продам",
   "main": "./src/service/service.js",
   "scripts": {
-    "test": "npm run eslint && npm run jest",
+    "test": "npm run eslint && npm run test::rest",
+    "test::rest": "npm run jest ./src/service/api",
     "eslint": "eslint --ext .js src/",
     "start": "node ./src/service/service.js",
     "server": "nodemon ./src/service/service.js --server",

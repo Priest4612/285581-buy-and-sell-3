@@ -1,8 +1,8 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HttpStatusCode} = require(`../../constants`);
-const {offerValidator, offerExists, commentValidator} = require(`../middlewares`);
+const {HttpStatusCode} = require(`../../../constants`);
+const {offerValidator, offerExists, commentValidator} = require(`../../middlewares`);
 
 const route = new Router();
 
@@ -46,7 +46,8 @@ const offerRouter = (app, offerService, commentService) => {
 
     const updateOffer = offerService.update(offerId, req.body);
 
-    return res.stastus(HttpStatusCode.OK)
+    return res
+      .status(HttpStatusCode.OK)
       .json(updateOffer);
   });
 
