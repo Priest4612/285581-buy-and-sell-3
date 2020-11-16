@@ -188,14 +188,8 @@ describe(`API correctly deletes an offer`, () => {
 
   test(`Offer count is 4 now`, () => request(app)
     .get(`/offers`)
-    .expect((res) => {
-      console.log(mockData);
-      console.log(`###`);
-      console.log(res.body);
-      expect(res.body.length).toBe(4);
-    })
+    .expect((res) => expect(res.body.length).toBe(4))
   );
-
 });
 
 test(`API refuses to delete non-existent offer`, () => {
@@ -205,7 +199,6 @@ test(`API refuses to delete non-existent offer`, () => {
   return request(app)
     .delete(`/offers/NOEXST`)
     .expect(HttpStatusCode.NOT_FOUND);
-
 });
 
 describe(`API returns a list of comments to given offer`, () => {
@@ -224,7 +217,6 @@ describe(`API returns a list of comments to given offer`, () => {
   test(`Returns list of 3 comments`, () => expect(response.body.length).toBe(3));
 
   test(`First comment's id is "Xtifpw"`, () => expect(response.body[0].id).toBe(`Xtifpw`));
-
 });
 
 
@@ -252,7 +244,6 @@ describe(`API creates a comment if data is valid`, () => {
     .get(`/offers/xI0EG7/comments`)
     .expect((res) => expect(res.body.length).toBe(5))
   );
-
 });
 
 test(`API refuses to create a comment to non-existent offer and returns status code 404`, () => {
@@ -265,7 +256,6 @@ test(`API refuses to create a comment to non-existent offer and returns status c
       text: `Неважно`
     })
     .expect(HttpStatusCode.NOT_FOUND);
-
 });
 
 test(`API refuses to create a comment when data is invalid, and returns status code 400`, () => {
@@ -276,7 +266,6 @@ test(`API refuses to create a comment when data is invalid, and returns status c
     .post(`/offers/xI0EG7/comments`)
     .send({})
     .expect(HttpStatusCode.BAD_REQUEST);
-
 });
 
 describe(`API correctly deletes a comment`, () => {
@@ -298,7 +287,6 @@ describe(`API correctly deletes a comment`, () => {
     .get(`/offers/xI0EG7/comments`)
     .expect((res) => expect(res.body.length).toBe(3))
   );
-
 });
 
 test(`API refuses to delete non-existent comment`, () => {
@@ -308,7 +296,6 @@ test(`API refuses to delete non-existent comment`, () => {
   return request(app)
     .delete(`/offers/xI0EG7/comments/NOEXST`)
     .expect(HttpStatusCode.NOT_FOUND);
-
 });
 
 test(`API refuses to delete a comment to non-existent offer`, () => {
@@ -318,5 +305,4 @@ test(`API refuses to delete a comment to non-existent offer`, () => {
   return request(app)
     .delete(`/offers/NOEXST/comments/R8sIDT`)
     .expect(HttpStatusCode.NOT_FOUND);
-
 });
