@@ -4,9 +4,9 @@ const {Router} = require(`express`);
 const {HttpStatusCode} = require(`../../../constants`);
 const {offerValidator, offerExists, commentValidator} = require(`../../middlewares`);
 
-const route = new Router();
-
 const offerRouter = (app, offerService, commentService) => {
+  const route = new Router();
+
   app.use(`/offers`, route);
 
   route.get(`/`, (req, res) => {

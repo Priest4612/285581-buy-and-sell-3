@@ -5,7 +5,8 @@ const request = require(`supertest`);
 
 const {HttpStatusCode} = require(`../../../constants`);
 const offer = require(`./offer`).offerRouter;
-const {OfferService, CommentService} = require(`../../data-service`);
+const DataService = require(`../../data-service`).OfferService;
+const CommentService = require(`../../data-service`).CommentService;
 
 const mockData = require(`./offer-test-mock.json`);
 
@@ -13,7 +14,7 @@ const createAPI = () => {
   const app = express();
   const cloneData = JSON.parse(JSON.stringify(mockData));
   app.use(express.json());
-  offer(app, new OfferService(cloneData), new CommentService());
+  offer(app, new DataService(cloneData), new CommentService());
   return app;
 };
 
@@ -187,7 +188,12 @@ describe(`API correctly deletes an offer`, () => {
 
   test(`Offer count is 4 now`, () => request(app)
     .get(`/offers`)
-    .expect((res) => expect(res.body.length).toBe(4))
+    .expect((res) => {
+      console.log(mockData);
+      console.log(`###`);
+      console.log(res.body);
+      expect(res.body.length).toBe(4);
+    })
   );
 
 });
