@@ -1,6 +1,5 @@
 'use strict';
 
-const chalk = require(`chalk`);
 const path = require(`path`);
 const {nanoid} = require(`nanoid`);
 
