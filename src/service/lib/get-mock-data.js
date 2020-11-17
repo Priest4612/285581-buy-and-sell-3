@@ -2,11 +2,13 @@
 
 const path = require(`path`);
 
+const {getLogger} = require(`../lib/logger`);
 const {fileUtils} = require(`../../utils`);
 const {PROJECT_DIR} = require(`../../../settings`);
 const FILE_NAME = `mock.json`;
 let data = [];
 
+const logger = getLogger({name: `GET-MOCK-DATA`});
 
 const getMockData = async () => {
   if (data.length) {
@@ -16,7 +18,7 @@ const getMockData = async () => {
   try {
     data = fileUtils.readJsonFileToArray(path.join(PROJECT_DIR, FILE_NAME));
   } catch (err) {
-    console.log(err);
+    logger.error(err);
     return Promise.reject(err);
   }
 

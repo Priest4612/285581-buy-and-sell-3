@@ -1,12 +1,12 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HttpStatusCode} = require(`../../constants`);
-const {offerValidator, offerExists, commentValidator} = require(`../middlewares`);
-
-const route = new Router();
+const {HttpStatusCode} = require(`../../../constants`);
+const {offerValidator, offerExists, commentValidator} = require(`../../middlewares`);
 
 const offerRouter = (app, offerService, commentService) => {
+  const route = new Router();
+
   app.use(`/offers`, route);
 
   route.get(`/`, (req, res) => {
@@ -46,7 +46,8 @@ const offerRouter = (app, offerService, commentService) => {
 
     const updateOffer = offerService.update(offerId, req.body);
 
-    return res.stastus(HttpStatusCode.OK)
+    return res
+      .status(HttpStatusCode.OK)
       .json(updateOffer);
   });
 

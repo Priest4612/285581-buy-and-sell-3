@@ -17,16 +17,13 @@ class OfferService {
   }
 
   drop(id) {
-    const offer = this._offers
-      .find((item) => item.id === id);
+    const offer = this._offers.find((item) => item.id === id);
 
     if (!offer) {
       return null;
     }
 
-    this._offers = this._offers
-      .filter((item) => item.id !== id);
-
+    this._offers = this._offers.filter((item) => item.id !== id);
     return offer;
   }
 
@@ -35,8 +32,7 @@ class OfferService {
   }
 
   findOne(id) {
-    return this._offers
-      .find((item) => item.id === id);
+    return this._offers.find((item) => item.id === id);
   }
 
   update(id, offer) {
@@ -45,9 +41,9 @@ class OfferService {
 
     return Object.assign(oldOffer, offer);
   }
+
 }
 
-
 module.exports = {
-  OfferService,
+  OfferService
 };

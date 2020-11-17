@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HttpStatusCode} = require(`../../constants`);
+const {HttpStatusCode} = require(`../../../constants`);
 
 const route = new Router();
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HttpStatusCode} = require(`../../constants`);
+const {HttpStatusCode} = require(`../../../constants`);
 
 const route = new Router();
 
@@ -12,7 +12,8 @@ const searchRouter = (app, service) => {
     const {query = ``} = req.query;
 
     if (!query) {
-      res.status(HttpStatusCode.BAD_REQUEST)
+      res
+        .status(HttpStatusCode.BAD_REQUEST)
         .json([]);
       return;
     }
@@ -22,7 +23,7 @@ const searchRouter = (app, service) => {
 
     res
       .status(searchStatus)
-      .json(searchStatus);
+      .json(searchResults);
   });
 };
 
