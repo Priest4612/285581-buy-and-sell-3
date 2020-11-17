@@ -4,6 +4,9 @@ const chalk = require(`chalk`);
 const path = require(`path`);
 const {nanoid} = require(`nanoid`);
 
+const {getLogger} = require(`../lib/logger`);
+const logger = getLogger({name: `GENERATE`});
+
 const {getRandomInt, arrayUtils, fileUtils} = require(`../../utils`);
 const {ExitCode, MAX_ID_LENGTH} = require(`../../constants`);
 const {PROJECT_DIR} = require(`../../../settings`);
@@ -84,14 +87,14 @@ module.exports = {
 
 
       if (countOffer > OfferRestrict.MAX_COUNT) {
-        console.error(chalk.red(`Не больше ${OfferRestrict.MAX_COUNT} объявлений.`));
+        logger.error(`Не больше ${OfferRestrict.MAX_COUNT} объявлений.`);
         process.exit(ExitCode.ERROR);
       }
 
       await fileUtils.writeFileJSON(FILE_NAME, generateOffers(countOffer, options));
-      console.log(chalk.green(`Operation success. File created.`));
+      logger.info(`Operation success. File created.`);
     } catch (err) {
-      console.error(chalk.red(err));
+      logger.error(err);
       process.exit(ExitCode.ERROR);
     }
   }

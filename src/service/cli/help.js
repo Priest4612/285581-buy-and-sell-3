@@ -1,6 +1,7 @@
 'use strict';
 
-const chalk = require(`chalk`);
+const {getLogger} = require(`../lib/logger`);
+const logger = getLogger({name: `HELP`});
 
 module.exports = {
   name: `--help`,
@@ -18,6 +19,6 @@ module.exports = {
       --server <port>       запускает сервер
     `;
 
-    console.log(chalk.gray(text));
+    logger.info(text);
   }
 };
