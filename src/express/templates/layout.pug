@@ -9,6 +9,9 @@ html(lang='ru')
     link(rel='stylesheet' href='/css/style.min.css')
 
   body
+    mixin ticketLabel(type)
+      span.ticket-card__label #{type === `OFFER` ? `Куплю` : `Продам`}
+
     include partials/header
 
     block content

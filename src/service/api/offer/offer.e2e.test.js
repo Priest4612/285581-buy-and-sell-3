@@ -5,8 +5,7 @@ const request = require(`supertest`);
 
 const {HttpStatusCode} = require(`../../../constants`);
 const offer = require(`./offer`).offerRouter;
-const DataService = require(`../../data-service`).OfferService;
-const CommentService = require(`../../data-service`).CommentService;
+const {OfferService, CommentService} = require(`../../data-service`);
 
 const mockData = require(`./offer-test-mock.json`);
 
@@ -14,7 +13,7 @@ const createAPI = () => {
   const app = express();
   const cloneData = JSON.parse(JSON.stringify(mockData));
   app.use(express.json());
-  offer(app, new DataService(cloneData), new CommentService());
+  offer(app, new OfferService(cloneData), new CommentService());
   return app;
 };
 
