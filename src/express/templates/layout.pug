@@ -5,12 +5,12 @@ html(lang='ru')
     meta(name='description' content='Доска объявлений — современный веб-сайт, упрощающий продажу или покупку абсолютно любых вещей.')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='ie=edge')
-    title #{title}
+    title Куплю Продам
     link(rel='stylesheet' href='/css/style.min.css')
 
   body
     mixin ticketLabel(type)
-      span.ticket-card__label #{type === `OFFER` ? `Куплю` : `Продам`}
+      span(class!=attributes.class || `ticket-card__label`) #{type === `offer` ? `Куплю` : `Продам`}
 
     include partials/header
 

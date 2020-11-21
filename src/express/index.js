@@ -1,25 +1,25 @@
 'use strict';
-const path = require(`path`);
 const express = require(`express`);
-
+const path = require(`path`);
+const {mainRouter} = require(`./routes/main-routes`);
+const {HttpStatusCode} = require(`../constants.js`);
 const {getLogger} = require(`../service/lib/logger`);
 
-const settings = require(`../../settings`);
-const mainRouter = require(`./routes/main-routes`).mainRouter;
-const {HttpStatusCode} = require(`../constants.js`);
 
 // Инициализация сервера...
+const settings = require(`../../settings`);
 const DEFAULT_PORT = settings.DEFAULT_PORT_FRONT;
 const PROJECT_DIR = settings.PROJECT_DIR;
 const PUBLIC_DIR = settings.PUBLIC_DIR;
+const UPLOAD_DIR = settings.UPLOAD_DIR;
 const TEMPLATES_DIR = settings.TEMPLATES_DIR;
 
 const logger = getLogger({name: `EXPRESS`});
 const app = express();
 
-app.use(express.static(path.resolve(PROJECT_DIR, PUBLIC_DIR)));
-
 app.use(`/`, mainRouter);
+app.use(express.static(path.resolve(PROJECT_DIR, PUBLIC_DIR)));
+app.use(express.static(path.resolve(PROJECT_DIR, UPLOAD_DIR)));
 
 app.use((req, res) => res.status(HttpStatusCode.BAD_REQUEST).render(`errors/404`));
 

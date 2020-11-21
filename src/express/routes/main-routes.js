@@ -9,9 +9,8 @@ const mainRouter = new Router();
 const api = require(`../api`).getAPI();
 
 mainRouter.get(`/`, async (req, res) => {
-  const offers = await api.getOffers();
-  console.log(offers);
-  res.render(`main/main`, {offers});
+  const apiOffersData = await api.getOffers();
+  res.render(`main/main`, {apiOffersData});
 });
 
 mainRouter.get(`/register`, (req, res) => res.render(`main/sign-up`));
@@ -21,12 +20,12 @@ mainRouter.get(`/search`, async (req, res) => {
   try {
     const {search} = req.query;
     const results = await api.search(search);
-    res.render(`main/search-result`, {
+    res.render(`main/search`, {
       results
     });
 
   } catch (error) {
-    res.render(`main/search-result`, {
+    res.render(`main/search`, {
       results: []}
     );
   }
