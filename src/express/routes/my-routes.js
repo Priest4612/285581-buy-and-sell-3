@@ -7,7 +7,7 @@ const myRouter = new Router();
 
 myRouter.get(`/`, async (req, res) => {
   const apiOffersData = await api.getOffers();
-  res.render(`my/comments`, {apiOffersData});
+  res.render(`my/my-tickets`, {apiOffersData});
 });
 
 
