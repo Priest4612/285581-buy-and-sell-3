@@ -5,12 +5,13 @@ const multer = require(`multer`);
 const path = require(`path`);
 const {nanoid} = require(`nanoid`);
 
-const settings = require(`../../../settings`);
-const PROJECT_DIR = settings.PROJECT_DIR;
-const UPLOAD_DIR = settings.UPLOAD_DIR;
+const {PROJECT_DIR, UPLOAD_DIR} = require(`../../../settings`);
 const IMAGES_DIR = `img`;
 
 const uploadDirAbsolute = path.resolve(PROJECT_DIR, UPLOAD_DIR, IMAGES_DIR);
+
+const {getLogger} = require(`../service/lib/logger`);
+const logger = getLogger({name: `MAIN-ROUTER`});
 
 const storage = multer.diskStorage({
   destination: uploadDirAbsolute,
@@ -48,7 +49,7 @@ offersRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
     await api.createOffer(offerData);
     res.redirect(`/my`);
   } catch (error) {
-    console.log(error.message);
+    logger.error(error.message);
     res.redirect(`back`);
   }
 });
