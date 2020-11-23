@@ -11,7 +11,7 @@ const IMAGES_DIR = `img`;
 const uploadDirAbsolute = path.resolve(PROJECT_DIR, UPLOAD_DIR, IMAGES_DIR);
 
 const {getLogger} = require(`../service/lib/logger`);
-const logger = getLogger({name: `MAIN-ROUTER`});
+const logger = getLogger({name: `OFFER-ROUTER`});
 
 const storage = multer.diskStorage({
   destination: uploadDirAbsolute,
