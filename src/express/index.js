@@ -7,12 +7,15 @@ const {getLogger} = require(`../service/lib/logger`);
 
 
 // Инициализация сервера...
-const settings = require(`../../settings`);
-const DEFAULT_PORT = settings.DEFAULT_PORT_FRONT;
-const PROJECT_DIR = settings.PROJECT_DIR;
-const PUBLIC_DIR = settings.PUBLIC_DIR;
-const UPLOAD_DIR = settings.UPLOAD_DIR;
-const TEMPLATES_DIR = settings.TEMPLATES_DIR;
+const {
+  DEFAULT_PORT_FRONT,
+  PROJECT_DIR,
+  PUBLIC_DIR,
+  UPLOAD_DIR,
+  TEMPLATES_DIR
+} = require(`../../settings`);
+
+const DEFAULT_PORT = process.env.PORT || DEFAULT_PORT_FRONT;
 
 const logger = getLogger({name: `EXPRESS`});
 const app = express();
@@ -31,5 +34,5 @@ app.use((err, _req, res, _next) => {
 app.set(`views`, path.resolve(PROJECT_DIR, TEMPLATES_DIR));
 app.set(`view engine`, `pug`);
 
-app.listen(process.env.PORT || DEFAULT_PORT,
+app.listen(DEFAULT_PORT,
     () => logger.info(`Сервер запущен на порту: ${DEFAULT_PORT}`));
