@@ -1,12 +1,14 @@
 'use strict';
 
 const {Router} = require(`express`);
+const {getLogger} = require(`../service/lib/logger`);
 
 const {offersRouter} = require(`./offers-routes`);
 const {myRouter} = require(`./my-routes`);
 
 const mainRouter = new Router();
 const api = require(`../api`).getAPI();
+const logger = getLogger({name: `MAIN-ROUTER`});
 
 mainRouter.get(`/`, async (req, res) => {
   const apiOffersData = await api.getOffers();
@@ -25,9 +27,7 @@ mainRouter.get(`/search`, async (req, res) => {
     });
 
   } catch (error) {
-    res.render(`main/search`, {
-      results: []}
-    );
+    logger.error(error);
   }
 });
 
