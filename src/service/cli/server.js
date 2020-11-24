@@ -32,12 +32,12 @@ app.use((req, res) => {
   logger.error(`Route not found: ${req.url}`);
 });
 
-app.use((error, req, res, _next) => {
+app.use((err, req, res, _next) => {
   res
     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-    .send(`INTERNAL_SERVER_ERROR: ${error.message}`);
+    .send(`INTERNAL_SERVER_ERROR: ${err.message}`);
 
-  logger.error(`An error occured on processing request: ${error.message}`);
+  logger.error(`An error occured on processing request: ${err.message}`);
 });
 
 module.exports = {
