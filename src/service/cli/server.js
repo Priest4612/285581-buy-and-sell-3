@@ -1,16 +1,17 @@
 'use strict';
 
 const express = require(`express`);
+const {testConnect} = require(`../db-service/db-connect`);
 
-const settings = require(`../../../settings`);
+const {DEFAULT_PORT_API} = require(`../../../settings`);
 const {HttpStatusCode, API_PREFIX} = require(`../../constants`);
 const routes = require(`../api`).app;
+
 const {getLogger} = require(`../lib/logger`);
-
-
-const DEFAULT_PORT = settings.DEFAULT_PORT_API;
-
 const logger = getLogger({name: `API`});
+
+
+const DEFAULT_PORT = DEFAULT_PORT_API;
 const app = express();
 
 app.use(express.json());
@@ -51,7 +52,7 @@ module.exports = {
         if (err) {
           return logger.error(`An error occured on server creation: ${err.message}`);
         }
-
+        testConnect();
         return logger.info(`Listening to connections on ${port}`);
       });
 

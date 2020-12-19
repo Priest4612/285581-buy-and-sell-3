@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {getLogger} = require(`../service/lib/logger`);
+const {getLogger} = require(`../../service/lib/logger`);
 
 const {offersRouter} = require(`./offers-routes`);
 const {myRouter} = require(`./my-routes`);

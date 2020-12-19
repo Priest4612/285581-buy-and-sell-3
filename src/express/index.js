@@ -15,7 +15,7 @@ const {
   TEMPLATES_DIR
 } = require(`../../settings`);
 
-const DEFAULT_PORT = process.env.PORT || DEFAULT_PORT_FRONT;
+const DEFAULT_PORT = DEFAULT_PORT_FRONT;
 
 const logger = getLogger({name: `EXPRESS`});
 const app = express();
