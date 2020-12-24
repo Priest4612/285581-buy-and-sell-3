@@ -124,12 +124,13 @@ Category.belongsToMany(Offer, {
   foreignKey: `categoryId`,
 });
 
-
+// Синхронизация с базой данных
 const initDb = async () => {
   const logger = getLogger({name: `DB-SYNC`});
   await sequelize.sync({force: true});
   logger.info(`Структура БД успешно создана.`);
 };
+
 
 module.exports = {
   db: {
