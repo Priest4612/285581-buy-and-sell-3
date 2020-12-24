@@ -26,4 +26,6 @@ module.exports = (sequelize) => {
     timestamps: false,
     paranoid: false
   });
+
+  return Offer;
 };

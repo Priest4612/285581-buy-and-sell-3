@@ -11,11 +11,11 @@ const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER
 });
 
 // Объявление моделей
-const Category = require(`./models/category`)(sequelize);
 const Comment = require(`./models/comment`)(sequelize);
-const OfferType = require(`./models/offer-type`)(sequelize);
 const Offer = require(`./models/offer`)(sequelize);
+const Category = require(`./models/category`)(sequelize);
 const Picture = require(`./models/picture`)(sequelize);
+const OfferType = require(`./models/offer-type`)(sequelize);
 const User = require(`./models/user`)(sequelize);
 
 
@@ -111,7 +111,7 @@ Comment.belongsTo(Offer, {
 // Модель offer_to_categories
 // ***********************************
 Offer.belongsToMany(Category, {
-  through: `offer_categories`,
+  through: `Offer_categories`,
   as: `categories`,
   foreignKey: `offerId`,
   timestamps: false,
@@ -119,7 +119,7 @@ Offer.belongsToMany(Category, {
 });
 
 Category.belongsToMany(Offer, {
-  through: `offer_categories`,
+  through: `Offer_categories`,
   as: `offers`,
   foreignKey: `categoryId`,
 });
