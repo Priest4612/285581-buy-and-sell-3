@@ -188,7 +188,7 @@ module.exports = {
         OfferType,
         UserRestrict
       };
-      const offers = generateOffers(count, offerOptions);
+      const offers = generateOffers(countOffer, offerOptions);
 
       const picturesData = await fileUtils.readTextFileToArray(FILE_ITEM_IMG_PATH);
       const pictures = generatePictures(offers.length, picturesData);
