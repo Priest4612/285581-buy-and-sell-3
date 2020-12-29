@@ -1,10 +1,10 @@
 'use strict';
 
 const Sequelize = require(`sequelize`);
-const {DB_NAME, DB_USER, USER_PASSWORD, DB_HOST, DB_DIALECT, DB_PORT} = process.env;
+const {DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT, DB_PORT} = process.env;
 
 
-const somethingIsNotDefined = [DB_NAME, DB_USER, USER_PASSWORD, DB_HOST, DB_DIALECT, DB_PORT]
+const somethingIsNotDefined = [DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT, DB_PORT]
       .some((it) => it === undefined);
 
 if (somethingIsNotDefined) {
@@ -12,7 +12,7 @@ if (somethingIsNotDefined) {
 }
 
 const sequelize = new Sequelize(
-    DB_NAME, DB_USER, USER_PASSWORD, {
+    DB_NAME, DB_USER, DB_PASSWORD, {
       host: DB_HOST,
       port: DB_PORT,
       dialect: DB_DIALECT,
