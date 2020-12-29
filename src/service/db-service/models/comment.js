@@ -5,7 +5,7 @@ const {Model, DataTypes} = require(`sequelize`);
 module.exports = (sequelize) => {
   class Comment extends Model {}
   Comment.init({
-    name: {
+    comment: {
       type: DataTypes.STRING,
       allowNull: false
     },

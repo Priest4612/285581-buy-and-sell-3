@@ -5,7 +5,7 @@ const {Model, DataTypes} = require(`sequelize`);
 module.exports = (sequelize) => {
   class OfferTypes extends Model {}
   OfferTypes.init({
-    name: {
+    type: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,

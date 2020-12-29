@@ -5,10 +5,14 @@ const {Model, DataTypes} = require(`sequelize`);
 module.exports = (sequelize) => {
   class Category extends Model {}
   Category.init({
-    name: {
+    category: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    picture: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
   }, {
     sequelize,
     timestamps: false,

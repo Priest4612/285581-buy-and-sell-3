@@ -5,10 +5,7 @@ const {Model, DataTypes} = require(`sequelize`);
 module.exports = (sequelize) => {
   class Picture extends Model {}
   Picture.init({
-    name: {
-      type: DataTypes.STRING,
-    },
-    path: {
+    picture: {
       type: DataTypes.STRING,
       allowNull: false,
     },

@@ -1,14 +1,8 @@
 'use strict';
 
-require(`dotenv`).config();
-const Sequelize = require(`sequelize`);
 const {getLogger} = require(`../lib/logger`);
+const {sequelize} = require(`../lib/sequelize`);
 
-// Подключение к базе данных
-const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.USER_PASSWORD}`, {
-  host: `${process.env.DB_HOST}`,
-  dialect: `${process.env.DIALECT}`,
-});
 
 // Объявление моделей
 const Comment = require(`./models/comment`)(sequelize);
@@ -17,38 +11,10 @@ const Category = require(`./models/category`)(sequelize);
 const Picture = require(`./models/picture`)(sequelize);
 const OfferType = require(`./models/offer-type`)(sequelize);
 const User = require(`./models/user`)(sequelize);
+const OfferToCategory = require(`./models/offer-to-category`)(sequelize);
 
 
 // НАСТРОЙКА CВЯЗИ МЕЖДУ ТАБЛИЦАМИ
-
-// ***********************************
-// Модедь Picture
-// ***********************************
-User.hasMany(Picture, {
-  as: `pictures`,
-  foreignKey: `userId`,
-});
-
-Picture.belongsTo(User, {
-  foreignKey: `userId`,
-  as: `user`,
-});
-
-
-// ***********************************
-// Модель Category
-// ***********************************
-Picture.hasMany(Category, {
-  as: `categories`,
-  foreignKey: `pictureId`,
-});
-
-Category.belongsTo(Picture, {
-  foreignKey: `pictureId`,
-  as: `picture`,
-});
-
-
 // ***********************************
 // Модель Offer
 // ***********************************
@@ -72,14 +38,14 @@ Offer.belongsTo(User, {
   as: `user`,
 });
 
-Picture.hasMany(Offer, {
-  as: `offers`,
-  foreignKey: `pictureId`,
+Offer.hasMany(Picture, {
+  as: `pictures`,
+  foreignKey: `offerId`,
 });
 
-Offer.belongsTo(Picture, {
-  foreignKey: `pictureId`,
-  as: `picture`,
+Picture.belongsTo(Offer, {
+  foreignKey: `offerId`,
+  as: `offer`,
 });
 
 
@@ -110,19 +76,16 @@ Comment.belongsTo(Offer, {
 // ***********************************
 // Модель offer_to_categories
 // ***********************************
-Offer.belongsToMany(Category, {
-  through: `Offer_categories`,
-  as: `categories`,
+Offer.hasMany(OfferToCategory, {
+  as: `offerToCategories`,
   foreignKey: `offerId`,
-  timestamps: false,
-  paranoid: false,
 });
 
-Category.belongsToMany(Offer, {
-  through: `Offer_categories`,
-  as: `offers`,
+Category.hasMany(OfferToCategory, {
+  as: `offerToCategories`,
   foreignKey: `categoryId`,
 });
+
 
 // Синхронизация с базой данных
 const initDb = async () => {
@@ -135,11 +98,12 @@ const initDb = async () => {
 module.exports = {
   db: {
     Category,
-    Comment,
     OfferType,
+    User,
     Offer,
     Picture,
-    User,
+    OfferToCategory,
+    Comment,
   },
   initDb,
   sequelize,
