@@ -12,11 +12,19 @@ Thumbs.db
 
 node_modules/
 */service/logs/*
+!*/service/logs/.gitkeep
+
 */express/upload/img/*
+!*/express/upload/img/.gitkeep
+
+mocks/*
+!mocks/.gitkeep
 
 mock.json
 src/test
 test.http
+
+# Файл с переменными окружения
 .env
 
 # Папка с собранными файлами проекта

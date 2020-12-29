@@ -7,12 +7,13 @@
     "test": "npm run eslint && npm run test::rest",
     "test::rest": "npm run jest ./src/service/api",
     "eslint": "eslint --ext .js src/",
-    "start": "cross-env LOG_LEVEL=error NODE_ENV=production node ./src/service/service.js",
-    "start::debug": "cross-env LOG_LEVEL=info NODE_ENV=development node ./src/service/service.js",
+    "start": "cross-env LOG_LEVEL=error NODE_ENV=production node -r dotenv/config ./src/service/service.js",
+    "start::debug": "cross-env LOG_LEVEL=info NODE_ENV=development node -r dotenv/config ./src/service/service.js",
     "server": "nodemon ./src/service/service.js --server",
-    "start-front-server": "nodemon ./src/express/index.js",
+    "start-front-server": "node -r dotenv/config ./src/express/index.js",
     "generate": "node ./src/service/service.js --generate",
-    "jest": "jest"
+    "jest": "jest",
+    "initdb": "node -r dotenv/config ./src/service/db-service/init-db.js"
   },
   "repository": {
     "type": "git",

@@ -4,19 +4,16 @@ const path = require(`path`);
 const {mainRouter} = require(`./routes/main-routes`);
 const {HttpStatusCode} = require(`../constants.js`);
 const {getLogger} = require(`../service/lib/logger`);
-
-
-// Инициализация сервера...
 const {
-  DEFAULT_PORT_FRONT,
+  DEFAULT_FRONT_PORT,
   PROJECT_DIR,
   PUBLIC_DIR,
   UPLOAD_DIR,
   TEMPLATES_DIR
 } = require(`../../settings`);
 
-const DEFAULT_PORT = DEFAULT_PORT_FRONT;
 
+const port = process.env.FRONT_PORT || DEFAULT_FRONT_PORT;
 const logger = getLogger({name: `EXPRESS`});
 const app = express();
 
@@ -34,5 +31,5 @@ app.use((err, _req, res, _next) => {
 app.set(`views`, path.resolve(PROJECT_DIR, TEMPLATES_DIR));
 app.set(`view engine`, `pug`);
 
-app.listen(DEFAULT_PORT,
-    () => logger.info(`Сервер запущен на порту: ${DEFAULT_PORT}`));
+app.listen(port,
+    () => logger.info(`Сервер запущен на порту: ${port}`));
