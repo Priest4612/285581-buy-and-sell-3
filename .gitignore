@@ -9,13 +9,23 @@ Thumbs.db
 
 # Вспомогательные файлы
 *.log*
+
 node_modules/
 */service/logs/*
-*/express/upload/img/*
+!*/service/logs/.gitkeep
 
-# Папка с собранными файлами проекта
-build/
+*/express/upload/img/*
+!*/express/upload/img/.gitkeep
+
+mocks/*
+!mocks/.gitkeep
 
 mock.json
 src/test
 test.http
+
+# Файл с переменными окружения
+.env
+
+# Папка с собранными файлами проекта
+build/
