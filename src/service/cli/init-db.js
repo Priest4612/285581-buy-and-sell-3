@@ -1,8 +1,22 @@
 'use strict';
 
-const {sequelize, initDb} = require(`../db-service/db`);
+const {ExitCode} = require(`../../constants`);
+const {sequelize} = require(`../lib/sequelize`);
+const defineModels = require(`../models`);
+const {getLogger} = require(`../lib/logger`);
 
-(async () => {
-  await initDb();
-  await sequelize.close();
-})();
+
+module.exports = {
+  name: `--initdb`,
+  async run() {
+    const logger = getLogger({name: `DB-SYNC`});
+    try {
+      defineModels(sequelize);
+      await sequelize.sync({force: true});
+      logger.info(`Структура БД успешно создана.`);
+    } catch (err) {
+      logger.error(err);
+      process.exit(ExitCode.ERROR);
+    }
+  }
+};
