@@ -9,7 +9,7 @@ const {getLogger} = require(`../lib/logger`);
 module.exports = {
   name: `--initdb`,
   async run() {
-    const logger = getLogger({name: `DB-SYNC`});
+    const logger = getLogger({name: `INIT-DB`});
     try {
       defineModels(sequelize);
       await sequelize.sync({force: true});

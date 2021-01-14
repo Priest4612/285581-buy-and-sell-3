@@ -5,7 +5,7 @@ const {ExitCode} = require(`../../constants`);
 const {sequelize} = require(`../lib/sequelize`);
 const {getRandomInt, arrayUtils, fileUtils, dateUtils} = require(`../../utils`);
 const {getLogger} = require(`../lib/logger`);
-const {initDb, db} = require(`../db-service/db`);
+const defineModels = require(`../models`);
 
 const {PROJECT_DIR} = require(`../../../settings`);
 const DATA_PATH = path.join(PROJECT_DIR, `data`);
@@ -27,13 +27,14 @@ const OfferRestrict = {
   MAX_COUNT: 1000,
 };
 
+
 const generateCategories = (options) => {
   const {categories, pictures} = options;
   const count = categories.length;
 
   return Array(count).fill({}).map((_item, index) => ({
     id: index + 1,
-    category: categories[index],
+    name: categories[index],
     picture: `/img/${pictures[index]}`
   }));
 };
@@ -57,13 +58,13 @@ const generateUsers = (count, options) => {
 const generateOfferTypes = (count, offerTypes) => {
   return Array(count).fill({}).map((_item, index) => ({
     id: index + 1,
-    type: offerTypes[index],
+    name: offerTypes[index],
   }));
 };
 
 
 const generateOffers = (count, options) => {
-  const {title, sentences, SumRestrict, DateRestrict, OfferType, UserRestrict} = options;
+  const {title, sentences, SumRestrict, DateRestrict, ListOfferType, UserRestrict} = options;
 
   return Array(count).fill({}).map((_item, index) => ({
     id: index + 1,
@@ -71,7 +72,7 @@ const generateOffers = (count, options) => {
     sentences: arrayUtils.getRandomElements(sentences).join(` `),
     sum: getRandomInt(SumRestrict.MIN, SumRestrict.MAX),
     createDate: dateUtils.getRandomDate(DateRestrict.MIN, DateRestrict.MAX),
-    offerTypeId: getRandomInt(OfferType.OFFER, OfferType.SALE),
+    offerTypeId: getRandomInt(ListOfferType.OFFER, ListOfferType.SALE),
     userId: getRandomInt(UserRestrict.MIN, UserRestrict.MAX),
   }));
 };
@@ -80,7 +81,7 @@ const generateOffers = (count, options) => {
 const generatePictures = (count, pictures) => {
   return Array(count).fill({}).map((_item, index) => ({
     id: index + 1,
-    picture: `/img/${arrayUtils.getOneRandomElement(pictures)}`,
+    path: `/img/${arrayUtils.getOneRandomElement(pictures)}`,
     offerId: index + 1,
   }));
 };
@@ -93,8 +94,8 @@ const generateOfferToCategories = (offers, categories) => {
       const isWrite = Math.random() > 0.65;
       if (isWrite) {
         const recording = {
-          offerId: i + 1,
-          categoryId: j + 1,
+          OfferId: i + 1,
+          CategoryId: j + 1,
         };
         offerToCategories.push(recording);
       }
@@ -116,7 +117,7 @@ const generateComments = (count, options) => {
       currentId = currentId + 1;
       const comment = {
         id: currentId,
-        comment: arrayUtils.getOneRandomElement(data),
+        text: arrayUtils.getOneRandomElement(data),
         createDate: dateUtils.getRandomDate(DateRestrict.MIN, DateRestrict.MAX),
         userId: getRandomInt(UserRestrict.MIN, UserRestrict.MAX),
         offerId: i + 1,
@@ -129,7 +130,7 @@ const generateComments = (count, options) => {
 
 
 module.exports = {
-  name: `--fill-db`,
+  name: `--filldb`,
   async run(args) {
     const logger = getLogger({name: `GENERATE`});
 
@@ -170,7 +171,7 @@ module.exports = {
         MAX: 100000,
       };
 
-      const OfferType = {
+      const ListOfferType = {
         OFFER: 1,
         SALE: offerTypes.length,
       };
@@ -185,7 +186,7 @@ module.exports = {
         sentences: await fileUtils.readTextFileToArray(FILE_SENTENCES_PATH),
         SumRestrict,
         DateRestrict,
-        OfferType,
+        ListOfferType,
         UserRestrict
       };
       const offers = generateOffers(countOffer, offerOptions);
@@ -208,28 +209,30 @@ module.exports = {
       };
       const comments = generateComments(offers.length, commentOptions);
 
-      await initDb();
+
+      const {Comment, Category, Offer, OfferToCategory, OfferType, Picture, User} = defineModels(sequelize);
+      await sequelize.sync({force: true});
       logger.info(`Заполняем таблицы:`);
-      logger.info(`Категории`);
-      await db.Category.bulkCreate(categories);
-      logger.info(`Успешно!`);
       logger.info(`Пользователи`);
-      await db.User.bulkCreate(users);
+      await User.bulkCreate(users);
       logger.info(`Успешно!`);
       logger.info(`Типы предложений`);
-      await db.OfferType.bulkCreate(offerTypes);
+      await OfferType.bulkCreate(offerTypes);
+      logger.info(`Успешно!`);
+      logger.info(`Категории`);
+      await Category.bulkCreate(categories);
       logger.info(`Успешно!`);
       logger.info(`Предложения`);
-      await db.Offer.bulkCreate(offers);
+      await Offer.bulkCreate(offers);
       logger.info(`Успешно!`);
       logger.info(`Изображения`);
-      await db.Picture.bulkCreate(pictures);
+      await Picture.bulkCreate(pictures);
       logger.info(`Успешно!`);
       logger.info(`Связь между предложениями и категориями`);
-      await db.OfferToCategory.bulkCreate(offerToCategories);
+      await OfferToCategory.bulkCreate(offerToCategories);
       logger.info(`Успешно!`);
       logger.info(`Комментарии`);
-      await db.Comment.bulkCreate(comments);
+      await Comment.bulkCreate(comments);
       logger.info(`Успешно!`);
       await sequelize.close();
     } catch (err) {
