@@ -1,11 +1,11 @@
 'use strict';
 
 const faker = require(`faker`);
+const {sequelize} = require(`../lib/sequelize`);
+const {getLogger} = require(`../lib/logger`);
 const {nanoid} = require(`nanoid`);
 const defineModels = require(`../models`);
 const Alias = require(`../models/alias`);
-const sequelize = require(`../lib/sequelize`);
-const {getLogger} = require(`../lib/logger`);
 
 const {
   getRandomInt,
@@ -66,7 +66,7 @@ const generateOffers = (count, title, sentences, comments, types, categories, us
     createDate: getRandomDate(0, MONTH_INTERVAL),
     offerTypeId: getOneRandomElement(types).id,
     userId: getOneRandomElement(users).id,
-    [Alias.PICTURES]: `/img/item${(getRandomInt(0, MAX_PICTURES)).toString().padStart(2, 0)}.jpg`,
+    [Alias.PICTURES]: ({path: `/img/item${(getRandomInt(0, MAX_PICTURES)).toString().padStart(2, 0)}.jpg`}),
     [Alias.comments]: Array(getRandomInt(0, MAX_COMMENTS))
       .fill({})
       .map(() => ({

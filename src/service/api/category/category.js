@@ -6,7 +6,7 @@ const {HttpStatusCode} = require(`../../../constants`);
 const route = new Router();
 
 const categoryRouter = (app, service) => {
-  app.use(`/categories`, route);
+  app.use(`/category`, route);
 
   route.get(`/`, (req, res) => {
     const categories = service.findAll();

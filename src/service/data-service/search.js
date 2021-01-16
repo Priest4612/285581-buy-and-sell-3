@@ -1,8 +1,8 @@
 'use strict';
 
 class SearchService {
-  constructor(offers) {
-    this._offers = offers;
+  constructor(sequelize) {
+    this._Offers = sequelize.module.Offer;
   }
 
   findAll(searchText) {
