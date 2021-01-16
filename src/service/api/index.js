@@ -24,7 +24,7 @@ defineModels(sequelize);
   const mockData = await getMockData();
 
   categoryRouter(app, new CategoryService(sequelize));
-  searchRouter(app, new SearchService(mockData));
+  searchRouter(app, new SearchService(sequelize));
   offerRouter(app, new OfferService(mockData), new CommentService());
 })();
 
