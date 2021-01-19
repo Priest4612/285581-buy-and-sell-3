@@ -46,7 +46,7 @@ const define = (sequelize) => {
   // ***********************************
   Offer.belongsToMany(Category, {through: OfferToCategory, as: Alias.CATEGORIES});
   Category.belongsToMany(Offer, {through: OfferToCategory, as: Alias.OFFERS});
-  Category.hasMany(OfferToCategory, {as: Alias.OfferToCategory});
+  Category.hasMany(OfferToCategory, {as: Alias.OFFER_TO_CATEGORIES});
 
   return {Comment, Category, Offer, OfferToCategory, OfferType, Picture, User};
 };

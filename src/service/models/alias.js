@@ -5,7 +5,7 @@ module.exports = {
   CATEGORIES: `categories`,
   OFFERS: `offers`,
   OFFER_TYPES: `offerTypes`,
-  OFFER_TO_CATEGORIES: `offerToCotegories`,
+  OFFER_TO_CATEGORIES: `offerToCategories`,
   PICTURES: `pictures`,
   USERS: `users`,
 };
