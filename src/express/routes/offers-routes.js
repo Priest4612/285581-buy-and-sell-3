@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 const multer = require(`multer`);
 const path = require(`path`);
 const {nanoid} = require(`nanoid`);
+const Alias = require(`../../service/models/alias`);
 
 const {PROJECT_DIR, UPLOAD_DIR} = require(`../../../settings`);
 const IMAGES_DIR = `img`;
@@ -37,12 +38,15 @@ offersRouter.get(`/add`, async (req, res) => {
 offersRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
   const {body, file} = req;
   const offerData = {
-    picture: file.filename,
+    [Alias.PICTURES]: file.filename,
     sum: body.price,
     type: body.action,
-    description: body.comment,
+    sentences: body.comment,
     title: body[`ticket-name`],
     category: body.category,
+    offerTypeId: 1,
+    userId: 1,
+    createDate: new Date(),
   };
 
   try {
@@ -57,13 +61,17 @@ offersRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
 offersRouter.get(`/edit/:id`, async (req, res) => {
   const {id} = req.params;
   const [apiOfferData, apiCategoriesData] = await Promise.all([
-    api.getOffer(id),
-    api.getCategories()
+    api.getOffer(id, {comments: false}),
+    api.getCategories({count: false})
   ]);
   res.render(`offers/ticket-edit`, {apiOfferData, apiCategoriesData});
 });
 
-offersRouter.get(`/:id`, (req, res) => res.render(`offers/ticket`));
+offersRouter.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  const apiOfferData = await api.getOffer(id, true);
+  res.render(`offers/ticket`, {apiOfferData});
+});
 
 module.exports = {
   offersRouter,
