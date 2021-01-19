@@ -23,20 +23,20 @@ class API {
     return response.data;
   }
 
-  getOffers() {
-    return this._load(`/offers`);
+  getOffers({comments}) {
+    return this._load(`/offers`, {params: {comments}});
   }
 
-  getOffer(id) {
-    return this._load(`/offers/${id}`);
+  async getOffer(id, comments) {
+    return await this._load(`/offers/${id}`, {params: {comments}});
   }
 
-  search(query) {
-    return this._load(`/search`, {params: {query}});
+  async search(query) {
+    return await this._load(`/search`, {params: {query}});
   }
 
-  async getCategories() {
-    return this._load(`/category`);
+  async getCategories(count) {
+    return await this._load(`/category`, {params: {count}});
   }
 
   async createOffer(data) {
