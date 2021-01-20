@@ -4,11 +4,13 @@ const Alias = require(`../models/alias`);
 
 class OfferService {
   constructor(sequelize) {
+    this._sequelize = sequelize;
     this._Offer = sequelize.models.Offer;
     this._Category = sequelize.models.Category;
     this._Comment = sequelize.models.Comment;
     this._Picture = sequelize.models.Picture;
     this._User = sequelize.models.User;
+    this._OfferToCategory = sequelize.models.OfferToCategory;
   }
 
   async create(offerData) {
@@ -49,21 +51,12 @@ class OfferService {
     return await this._Offer.findByPk(id, {include});
   }
 
-  async filterToCategory(categoryId) {
-    const include = [Alias.PICTURES, Alias.OFFER_TYPES];
-    include.push({
-      attributes: [
-        `id`,
-        `name`
-      ],
-      model: this._Category,
-      as: Alias.CATEGORIES,
-      where: {
-        id: categoryId
-      }
-    });
+  async filterToCategory(findCategoryId) {
+    const sql = `SELECT * FROM "offers" INNER JOIN "offerTypes" ON "offerTypes"."id" = "offers"."offerTypeId" INNER JOIN "pictures" ON "pictures"."offerId" = "offers"."id" LEFT JOIN "offerToCategories" ON "offers"."id" = "offerToCategories"."offerId" INNER JOIN "categories" ON "categories"."id" = "offerToCategories"."categoryId" WHERE "offers"."id" IN (SELECT "offers"."id" FROM "offerToCategories"	LEFT JOIN "offers" ON "offers"."id" = "offerToCategories"."offerId" AND "offerToCategories"."categoryId" = ?)`;
 
-    return await this._Offer.findAll({include});
+    const type = this._sequelize.QueryTypes.SELECT;
+    const replacements = [findCategoryId];
+    return await this._sequelize.query(sql, {type, replacements});
   }
 
   async update(id, offer) {
