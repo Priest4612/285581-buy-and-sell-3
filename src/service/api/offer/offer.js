@@ -21,6 +21,15 @@ const offerRouter = (app, offerService, commentService) => {
       .json(result);
   });
 
+  route.get(`/category/:categoryId`, async (req, res) => {
+    const {categoryId} = req.params;
+
+    const result = await offerService.filterToCategory(categoryId);
+
+    return res.status(HttpStatusCode.OK)
+      .json(result);
+  });
+
   route.get(`/:offerId`, async (req, res) => {
     const {offerId} = req.params;
     const {comments} = req.query;

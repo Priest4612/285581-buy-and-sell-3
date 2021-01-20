@@ -27,6 +27,10 @@ class API {
     return this._load(`/offers`, {params: {comments}});
   }
 
+  async getOffersToCategory(categoryId) {
+    return await this._load(`/offers/category/${categoryId}`);
+  }
+
   async getOffer(id, comments) {
     return await this._load(`/offers/${id}`, {params: {comments}});
   }

@@ -28,7 +28,19 @@ const upload = multer({storage});
 const api = require(`../api`).getAPI();
 const offersRouter = new Router();
 
-offersRouter.get(`/category/:id`, (req, res) => res.render(`offers/category`));
+offersRouter.get(`/category/:categoryId`, async (req, res) => {
+  const {categoryId} = req.params;
+
+  const [
+    apiOffersToCategoryData,
+    apiCategoriesData
+  ] = await Promise.all([
+    api.getOffersToCategory(categoryId),
+    api.getCategories({count: true})
+  ]);
+
+  res.render(`offers/category`, {apiOffersToCategoryData, apiCategoriesData});
+});
 
 offersRouter.get(`/add`, async (req, res) => {
   const apiCategoriesData = await api.getCategories();

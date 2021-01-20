@@ -49,6 +49,23 @@ class OfferService {
     return await this._Offer.findByPk(id, {include});
   }
 
+  async filterToCategory(categoryId) {
+    const include = [Alias.PICTURES, Alias.OFFER_TYPES];
+    include.push({
+      attributes: [
+        `id`,
+        `name`
+      ],
+      model: this._Category,
+      as: Alias.CATEGORIES,
+      where: {
+        id: categoryId
+      }
+    });
+
+    return await this._Offer.findAll({include});
+  }
+
   async update(id, offer) {
     const [affectedRows] = await this._Offer.update(offer, {
       where: {id}

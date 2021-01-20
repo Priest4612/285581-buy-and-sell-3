@@ -44,9 +44,9 @@ const define = (sequelize) => {
   // ***********************************
   // Модель offer_to_categories
   // ***********************************
-  Offer.belongsToMany(Category, {through: OfferToCategory, as: Alias.CATEGORIES});
-  Category.belongsToMany(Offer, {through: OfferToCategory, as: Alias.OFFERS});
-  Category.hasMany(OfferToCategory, {as: Alias.OFFER_TO_CATEGORIES});
+  Offer.belongsToMany(Category, {through: OfferToCategory, as: Alias.CATEGORIES, foreignKey: `offerId`});
+  Category.belongsToMany(Offer, {through: OfferToCategory, as: Alias.OFFERS, foreignKey: `categoryId`});
+  Category.hasMany(OfferToCategory, {as: Alias.OFFER_TO_CATEGORIES, foreignKey: `categoryId`});
 
   return {Comment, Category, Offer, OfferToCategory, OfferType, Picture, User};
 };
