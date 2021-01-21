@@ -37,7 +37,7 @@ block content
             ul.ticket__tags
               each category in apiOfferData.categories
                 li
-                  a.category-tile.category-tile--small(href='#')
+                  a.category-tile.category-tile--small(href=`../offers/category/${category.id}`)
                     span.category-tile__image
                       img(src=category.picture srcset=category.picture alt='Иконка категории')
                     span.category-tile__label #{category.name}

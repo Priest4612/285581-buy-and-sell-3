@@ -39,7 +39,9 @@ offersRouter.get(`/category/:categoryId`, async (req, res) => {
     api.getCategories({count: true})
   ]);
 
-  res.render(`offers/category`, {apiOffersToCategoryData, apiCategoriesData});
+  const currentCategory = apiCategoriesData.find((it) => it.id === Number.parseInt(categoryId, 10));
+
+  res.render(`offers/category`, {currentCategory, apiOffersToCategoryData, apiCategoriesData});
 });
 
 offersRouter.get(`/add`, async (req, res) => {

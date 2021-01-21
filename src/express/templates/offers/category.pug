@@ -8,23 +8,22 @@ block content
       h2.visually-hidden Предложения из категории электроника
       .tickets-list__wrapper
         .tickets-list__header
-          p.tickets-list__title
-            | Электроника
-            b.js-qty 62
+          p.tickets-list__title #{currentCategory.name}
+            b.js-qty #{` ${currentCategory.count}`}
         ul
           each apiOffer, index in apiOffersToCategoryData
             li.tickets-list__item
               div(class=`ticket-card ticket-card--color${(index > 9) ? index : "0" + index}`)
                 .ticket-card__img
-                  img(src=apiOffer.poctures[0].path srcset=apiOffer.poctures[0].path alt=apiOffer.title)
+                  img(src=apiOffer.pictures[0].path srcset=apiOffer.pictures[0].path alt=apiOffer.title)
                 .ticket-card__info
                   +ticketLabel(apiOffer.offerTypes.name)
                   .ticket-card__categories
                     each category in apiOffer.categories
-                      a(href=`/offers/category/${category.id}`) #{category.name}
+                      a(href=`../../offers/category/${category.id}`) #{category.name}
                   .ticket-card__header
                     h3.ticket-card__title
-                      a(href=`offers/${apiOffer.id}`) #{apiOffer.title}
+                      a(href=`../../offers/${apiOffer.id}`) #{apiOffer.title}
                     p.ticket-card__price
                       span.js-sum #{apiOffer.sum}
                       |  ₽
