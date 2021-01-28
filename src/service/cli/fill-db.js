@@ -1,11 +1,10 @@
 'use strict';
 
 const faker = require(`faker`);
-const {sequelize} = require(`../lib/sequelize`);
 const {getLogger} = require(`../lib/logger`);
 const {nanoid} = require(`nanoid`);
-const defineModels = require(`../models`);
-const Alias = require(`../models/alias`);
+const initDatabase = require(`../lib/init-db`);
+const {sequelize} = require(`../lib/sequelize`);
 
 const {
   getRandomInt,
@@ -18,6 +17,7 @@ const {
   },
   fileUtils: {
     readTextFileToArray,
+    writeFileJSON
   },
 } = require(`../../utils`);
 
@@ -37,7 +37,6 @@ const {
   },
   DataFilePath,
 } = require(`../../constants`);
-
 
 const generateOfferTypes = (offerTypes) =>
   offerTypes.map((type) => ({name: type}));
@@ -64,17 +63,17 @@ const generateOffers = (count, title, sentences, comments, types, categories, us
     sentences: getRandomElements(sentences).join(` `),
     sum: getRandomInt(MIN_SUM, MAX_SUM),
     createDate: getRandomDate(0, MONTH_INTERVAL),
-    offerTypeId: getOneRandomElement(types).id,
-    userId: getOneRandomElement(users).id,
-    [Alias.PICTURES]: ({path: `/img/item${(getRandomInt(1, MAX_PICTURES)).toString().padStart(2, 0)}.jpg`}),
-    [Alias.COMMENTS]: Array(getRandomInt(1, MAX_COMMENTS))
+    offerTypeId: getRandomInt(1, types.length),
+    userId: getRandomInt(1, users.length),
+    pictures: ({path: `/img/item${(getRandomInt(1, MAX_PICTURES)).toString().padStart(2, 0)}.jpg`}),
+    comments: Array(getRandomInt(1, MAX_COMMENTS))
       .fill({})
       .map(() => ({
         text: getRandomElements(comments).join(` `),
-        userId: getOneRandomElement(users).id,
+        userId: getRandomInt(1, users.length),
         createDate: getRandomDate(0, MONTH_INTERVAL),
       })),
-    categories: getRandomElements(categories).map((category) => category.id),
+    categories: getRandomElements(categories).map((category) => category.name),
   }));
 
 
@@ -85,9 +84,6 @@ module.exports = {
     const logger = getLogger({name: `FILL-DB`});
 
     try {
-      const {Category, Offer, OfferType, User} = defineModels(sequelize);
-      await sequelize.sync({force: true});
-
       const [count] = args;
       const countOffer = Number.parseInt(count, 10) || DEFAULT_OFFERS_COUNT;
 
@@ -106,9 +102,9 @@ module.exports = {
       ]);
 
       const [offerTypes, categories, users] = await Promise.all([
-        OfferType.bulkCreate(generateOfferTypes(offerTypesContent)),
-        Category.bulkCreate(generateCategories(categoriesContent)),
-        User.bulkCreate(generateUsers(birthDateContent))
+        generateOfferTypes(offerTypesContent),
+        generateCategories(categoriesContent),
+        generateUsers(birthDateContent)
       ]);
 
       const generatedOffers = generateOffers(
@@ -121,14 +117,8 @@ module.exports = {
           users
       );
 
-      await Promise.all(
-          generatedOffers
-            .map(async (offer) => {
-              const createdOffer = await Offer.create(offer, {include: [Alias.PICTURES, Alias.COMMENTS]});
-              await createdOffer.addCategories(offer.categories);
-            })
-      );
-      logger.info(`База данныз заполнена данными`);
+      await initDatabase(sequelize, offerTypes, categories, users, generatedOffers);
+
     } catch (err) {
       logger.error(err);
       process.exit(ExitCode.ERROR);
