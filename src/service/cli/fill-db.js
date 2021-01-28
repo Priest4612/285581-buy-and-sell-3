@@ -17,7 +17,6 @@ const {
   },
   fileUtils: {
     readTextFileToArray,
-    writeFileJSON
   },
 } = require(`../../utils`);
 
