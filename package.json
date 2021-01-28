@@ -33,6 +33,7 @@
     "nodemon": "2.0.4",
     "pino-multi-stream": "5.1.1",
     "pino-pretty": "4.3.0",
+    "sqlite3": "5.0.1",
     "supertest": "6.0.1"
   },
   "dependencies": {

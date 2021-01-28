@@ -25,6 +25,9 @@ class CategoryService {
           ]
         ],
         group: [Sequelize.col(`Category.id`)],
+        order: [
+          [`id`, `ASC`],
+        ],
         include: [{
           model: this._OfferToCategory,
           as: Alias.OFFER_TO_CATEGORIES,
@@ -33,7 +36,12 @@ class CategoryService {
       });
       return await result.map((it) => it.get());
     } else {
-      return await this._Category.findAll({raw: true});
+      return await this._Category.findAll({
+        order: [
+          [`id`, `ASC`],
+        ],
+        raw: true
+      });
     }
   }
 }
