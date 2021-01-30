@@ -19,10 +19,6 @@ const define = (sequelize) => Offer.init({
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  createDate: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
 }, {
   sequelize,
   modelName: `Offer`,

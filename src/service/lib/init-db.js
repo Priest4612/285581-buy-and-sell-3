@@ -4,11 +4,9 @@ const defineModels = require(`../models`);
 const Alias = require(`../models/alias`);
 
 
-module.exports = async (sequelize, ...options) => {
+module.exports = async (sequelize, {offerTypes, categories, users, offers}) => {
   const {Category, Offer, OfferType, User} = defineModels(sequelize);
   await sequelize.sync({force: true});
-
-  const [offerTypes, categories, users, offers] = options;
 
   const categoryModels = await Category.bulkCreate(categories);
 

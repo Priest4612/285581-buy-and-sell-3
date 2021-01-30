@@ -2,18 +2,19 @@
 
 const {HttpStatusCode} = require(`../../constants.js`);
 
-const offerKeys = [`type`, `title`, `description`, `sum`, `picture`, `category`];
+const offerKeys = [`offerTypeId`, `title`, `sentences`, `sum`, `pictures`, `categories`, `userId`];
 
 const offerValidator = (req, res, next) => {
-  const newOffer = req.body;
+  console.log(`Валидатор: ${newOffer}`);
   const keys = Object.keys(newOffer);
   const keysExists = offerKeys.every((key) => keys.includes(key));
 
   if (!keysExists) {
     return res.status(HttpStatusCode.BAD_REQUEST)
-      .send(`Bad request`);
+    .send(`Bad request`);
   }
 
+  const newOffer = req.body;
   return next();
 };
 

@@ -47,6 +47,7 @@ const offerRouter = (app, offerService, commentService) => {
 
 
   route.post(`/`, offerValidator, async (req, res) => {
+    console.log(req.body);
     const offer = await offerService.create(req.body);
 
     return res.status(HttpStatusCode.CREATED)

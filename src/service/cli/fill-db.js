@@ -3,7 +3,7 @@
 const faker = require(`faker`);
 const {getLogger} = require(`../lib/logger`);
 const {nanoid} = require(`nanoid`);
-const initDatabase = require(`../lib/init-db`);
+const initDB = require(`../lib/init-db`);
 const {sequelize} = require(`../lib/sequelize`);
 
 const {
@@ -11,9 +11,6 @@ const {
   arrayUtils: {
     getOneRandomElement,
     getRandomElements,
-  },
-  dateUtils: {
-    getRandomDate,
   },
   fileUtils: {
     readTextFileToArray,
@@ -32,7 +29,6 @@ const {
     MAX_USERS,
     MIN_SUM,
     MAX_SUM,
-    MONTH_INTERVAL,
   },
   DataFilePath,
 } = require(`../../constants`);
@@ -61,7 +57,6 @@ const generateOffers = (count, title, sentences, comments, types, categories, us
     title: getOneRandomElement(title),
     sentences: getRandomElements(sentences).join(` `),
     sum: getRandomInt(MIN_SUM, MAX_SUM),
-    createDate: getRandomDate(0, MONTH_INTERVAL),
     offerTypeId: getRandomInt(1, types.length),
     userId: getRandomInt(1, users.length),
     pictures: ({path: `/img/item${(getRandomInt(1, MAX_PICTURES)).toString().padStart(2, 0)}.jpg`}),
@@ -70,7 +65,6 @@ const generateOffers = (count, title, sentences, comments, types, categories, us
       .map(() => ({
         text: getRandomElements(comments).join(` `),
         userId: getRandomInt(1, users.length),
-        createDate: getRandomDate(0, MONTH_INTERVAL),
       })),
     categories: getRandomElements(categories).map((category) => category.name),
   }));
@@ -116,7 +110,7 @@ module.exports = {
           users
       );
 
-      await initDatabase(sequelize, offerTypes, categories, users, generatedOffers);
+      await initDB(sequelize, {offerTypes, categories, users, offers: generatedOffers});
 
     } catch (err) {
       logger.error(err);

@@ -9,7 +9,9 @@ class OfferToCategory extends Model {
 const define = (sequelize) => OfferToCategory.init({}, {
   sequelize,
   modelName: `OfferToCategory`,
-  tableName: `offerToCategories`
+  tableName: `offerToCategories`,
+  timestamps: false,
+  paranoid: false,
 });
 
 module.exports = define;

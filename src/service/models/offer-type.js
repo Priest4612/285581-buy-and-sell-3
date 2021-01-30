@@ -16,6 +16,8 @@ const define = (sequelize) => OfferType.init({
   sequelize,
   modelName: `OfferType`,
   tableName: `offerTypes`,
+  timestamps: false,
+  paranoid: false,
 });
 
 

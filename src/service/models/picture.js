@@ -13,6 +13,8 @@ const define = (sequelize) => Picture.init({
   sequelize,
   modelName: `Picture`,
   tableName: `pictures`,
+  timestamps: false,
+  paranoid: false,
 });
 
 

@@ -19,6 +19,8 @@ const define = (sequelize) => Category.init({
   sequelize,
   modelName: `Category`,
   tableName: `categories`,
+  timestamps: false,
+  paranoid: false,
 });
 
 
