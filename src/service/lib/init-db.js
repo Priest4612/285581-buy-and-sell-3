@@ -16,8 +16,8 @@ module.exports = async (sequelize, {offerTypes, categories, users, offers}) => {
   }), {});
 
   await Promise.all([
-    OfferType.bulkCreate(offerTypes),
-    User.bulkCreate(users),
+    await OfferType.bulkCreate(offerTypes),
+    await User.bulkCreate(users),
     offers.map(async (offer) => {
       const createdOffer = await Offer.create(offer, {include: [Alias.PICTURES, Alias.COMMENTS]});
       await createdOffer.addCategories(

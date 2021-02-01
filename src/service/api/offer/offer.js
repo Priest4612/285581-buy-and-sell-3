@@ -47,10 +47,10 @@ const offerRouter = (app, offerService, commentService) => {
 
 
   route.post(`/`, offerValidator, async (req, res) => {
-    console.log(req.body);
     const offer = await offerService.create(req.body);
 
-    return res.status(HttpStatusCode.CREATED)
+    return res
+      .status(HttpStatusCode.CREATED)
       .json(offer);
   });
 
@@ -82,7 +82,7 @@ const offerRouter = (app, offerService, commentService) => {
   });
 
   route.get(`/:offerId/comments`, offerExists(offerService), async (req, res) => {
-    const {offerId} = res.params;
+    const {offerId} = req.params;
     const comments = await commentService.findAll(offerId);
 
     res.status(HttpStatusCode.OK)
@@ -103,7 +103,7 @@ const offerRouter = (app, offerService, commentService) => {
   });
 
   route.post(`/:offerId/comments`, [offerExists(offerService), commentValidator], (req, res) => {
-    const {offerId} = res.params;
+    const {offerId} = req.params;
     const comment = commentService.create(offerId, req.body);
 
     return res.status(HttpStatusCode.CREATED)

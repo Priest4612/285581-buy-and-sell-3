@@ -14,9 +14,7 @@ class OfferService {
   }
 
   async create(offerData) {
-    console.log(offerData);
-
-    const offer = await this._Offer.create(offerData, {include: [Alias.PICTURES, Alias.COMMENTS]});
+    const offer = await this._Offer.create(offerData, {include: [Alias.PICTURES]});
     await offer.addCategories(offerData.categories);
     return offer.get();
   }
