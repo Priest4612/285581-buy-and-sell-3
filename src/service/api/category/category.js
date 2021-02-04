@@ -6,10 +6,12 @@ const {HttpStatusCode} = require(`../../../constants`);
 const route = new Router();
 
 const categoryRouter = (app, service) => {
-  app.use(`/categories`, route);
+  app.use(`/category`, route);
 
-  route.get(`/`, (req, res) => {
-    const categories = service.findAll();
+  route.get(`/`, async (req, res) => {
+    const {count} = req.query;
+
+    const categories = await service.findAll(count);
     res.status(HttpStatusCode.OK)
       .json(categories);
   });

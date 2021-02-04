@@ -28,14 +28,16 @@
   "devDependencies": {
     "eslint": "7.2.0",
     "eslint-config-htmlacademy": "0.5.2",
+    "faker": "5.1.0",
     "jest": "26.6.3",
     "nodemon": "2.0.4",
     "pino-multi-stream": "5.1.1",
     "pino-pretty": "4.3.0",
+    "sqlite3": "5.0.1",
     "supertest": "6.0.1"
   },
   "dependencies": {
-    "axios": "0.21.0",
+    "axios": "^0.21.1",
     "chalk": "4.1.0",
     "cross-env": "7.0.2",
     "dotenv": "8.2.0",
@@ -46,5 +48,10 @@
     "pino": "6.7.0",
     "pug": "3.0.0",
     "sequelize": "6.3.5"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/"
+    ]
   }
 }
