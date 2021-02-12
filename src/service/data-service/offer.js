@@ -51,6 +51,24 @@ class OfferService {
     return await this._Offer.findByPk(id, {include});
   }
 
+  async findPage({limit, offset, needComments}) {
+    const include = [Alias.CATEGORIES, Alias.PICTURES, Alias.OFFER_TYPES];
+    if (needComments) {
+      include.push({
+        model: this._Comment,
+        as: Alias.COMMENTS,
+        include: [Alias.USERS]
+      });
+    }
+    const {count, rows} = await this._Offer.findAndCountAll({
+      limit,
+      offset,
+      include,
+      distinct: true
+    });
+    return {count, offers: rows};
+  }
+
   async filterToCategory(findCategoryId) {
     const include = [Alias.CATEGORIES, Alias.PICTURES, Alias.OFFER_TYPES];
 

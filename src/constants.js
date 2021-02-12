@@ -8,6 +8,7 @@ const DEFAULT_COMMAND = `--help`;
 const MAX_ID_LENGTH = 6;
 const API_PREFIX = `/api`;
 
+const OFFERS_PER_PAGE = 8;
 
 const ExitCode = {
   SUCCESS: 0,
@@ -62,5 +63,6 @@ module.exports = {
   API_PREFIX,
   Env,
   DataFilePath,
-  GenerateFileRequirements
+  GenerateFileRequirements,
+  OFFERS_PER_PAGE
 };

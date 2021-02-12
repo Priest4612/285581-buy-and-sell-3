@@ -23,8 +23,8 @@ class API {
     return response.data;
   }
 
-  getOffers({comments}) {
-    return this._load(`/offers`, {params: {comments}});
+  getOffers({limit, offset, comments}) {
+    return this._load(`/offers`, {params: {limit, offset, comments}});
   }
 
   async getOffersToCategory(categoryId) {
