@@ -12,6 +12,12 @@ html(lang='ru')
     include mixins/ticket-label.pug
     include mixins/pagination.pug
 
+    style.
+      a.active{
+        pointer-events: none;
+      }
+
+
     include partials/header
 
     block content
