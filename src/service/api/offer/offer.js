@@ -13,11 +13,11 @@ const offerRouter = (app, offerService, commentService) => {
     const {offset, limit, comments} = req.query;
     let result;
     if (limit || offset) {
-      result = await offerService.findPage({limit, offset});
+      result = await offerService.findPage({limit, offset, comments});
     } else {
       result = await offerService.findAll(comments);
     }
-    return res.status(HttpStatusCode.OK)
+    res.status(HttpStatusCode.OK)
       .json(result);
   });
 

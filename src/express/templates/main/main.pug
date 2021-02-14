@@ -1,8 +1,8 @@
-extends ../layout
+extends ../layout.pug
 
 block content
   main.page-content
-    include ../partials/categories
+    include ../partials/categories.pug
     section.tickets-list
       h2.visually-hidden Самые новые предложения
       .tickets-list__wrapper
@@ -27,3 +27,4 @@ block content
                       |  ₽
                   .ticket-card__desc
                     p #{apiOffer.description}
+  +pagination(page, totalPages, 2, `?`)

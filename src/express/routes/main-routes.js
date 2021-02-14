@@ -12,22 +12,22 @@ const api = require(`../api`).getAPI();
 
 mainRouter.get(`/`, async (req, res) => {
   let {page = 1} = req.query;
-  page = +page
+  page = +page;
 
   const limit = OFFERS_PER_PAGE;
   const offset = (page - 1) * OFFERS_PER_PAGE;
 
   const [
-    {count, apiOffersData},
+    {count, offers},
     apiCategoriesData
   ] = await Promise.all([
-    api.getOffers({limit, offset}),
+    api.getOffers({limit, offset, comments: false}),
     api.getCategories({count: true})
   ]);
 
   const totalPages = Math.ceil(count / OFFERS_PER_PAGE);
 
-  res.render(`main/main`, {apiOffersData, apiCategoriesData, page, totalPages});
+  res.render(`main/main`, {apiOffersData: offers, apiCategoriesData, page, totalPages});
 });
 
 mainRouter.get(`/register`, (req, res) => res.render(`main/sign-up`));
