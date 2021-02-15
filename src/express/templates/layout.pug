@@ -9,8 +9,14 @@ html(lang='ru')
     link(rel='stylesheet' href='/css/style.min.css')
 
   body
-    mixin ticketLabel(type)
-      span(class!=attributes.class || `ticket-card__label`) #{type === `offer` ? `Куплю` : `Продам`}
+    include mixins/ticket-label.pug
+    include mixins/pagination.pug
+
+    style.
+      a.active{
+        pointer-events: none;
+      }
+
 
     include partials/header
 
