@@ -21,12 +21,12 @@ mixin pagination(page, totalPages, width, prefix)
 
   .tickets-list__pagination
     ul.pagination
-      if page > 1
+      if start > 1
         li
           a(href=`${prefix}page=${page - 1}`) Назад
       while i++ < end
         li
           a(class={active: i === page} href=`${prefix}page=${i}`)= i
-      if page < totalPages
+      if end < totalPages
         li
           a(href=`${prefix}page=${page + 1}`) Вперёд
