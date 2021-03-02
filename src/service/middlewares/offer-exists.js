@@ -2,9 +2,9 @@
 
 const {HttpStatusCode} = require(`../../constants`);
 
-const offerExists = (service) => (req, res, next) => {
+const offerExists = (service) => async (req, res, next) => {
   const {offerId} = req.params;
-  const offer = service.findOne(offerId);
+  const offer = await service.findOne(offerId);
 
   if (!offer) {
     return res.status(HttpStatusCode.NOT_FOUND)
