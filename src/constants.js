@@ -8,6 +8,15 @@ const DEFAULT_COMMAND = `--help`;
 const MAX_ID_LENGTH = 6;
 const API_PREFIX = `/api`;
 
+const EXPRESS_PATH = resolvePath(PROJECT_DIR, `src/express`);
+
+const FrontDir = {
+  PUBLIC_DIR: resolvePath(EXPRESS_PATH, `public`),
+  TEMPLATES_DIR: resolvePath(EXPRESS_PATH, `templates`),
+  UPLOAD_DIR: resolvePath(EXPRESS_PATH, `upload`),
+  UPLOAD_IMAGES_DIR: resolvePath(EXPRESS_PATH, `upload`, `img`),
+};
+
 const OFFERS_PER_PAGE = 8;
 
 const ExitCode = {
@@ -54,6 +63,10 @@ const GenerateFileRequirements = {
   MAX_PICTURES: 16
 };
 
+const ServiceDir = {
+  MODELS_PATH: resolvePath(PROJECT_DIR, `src/service`, `db/models`),
+};
+
 module.exports = {
   USER_ARGV_INDEX,
   DEFAULT_COMMAND,
@@ -64,5 +77,7 @@ module.exports = {
   Env,
   DataFilePath,
   GenerateFileRequirements,
-  OFFERS_PER_PAGE
+  OFFERS_PER_PAGE,
+  ServiceDir,
+  FrontDir
 };
