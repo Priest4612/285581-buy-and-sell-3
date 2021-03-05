@@ -14,10 +14,11 @@ const {
 } = require(`../data-service`);
 
 const {sequelize} = require(`../lib/sequelize`);
-const defineModels = require(`../models`);
+const {DataTypes} = require(`sequelize`);
+const defineModels = require(`../db/`);
 
 const app = new Router();
-defineModels(sequelize);
+defineModels(sequelize, DataTypes);
 
 (() => {
   categoryRouter(app, new CategoryService(sequelize));
