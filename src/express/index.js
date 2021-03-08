@@ -1,5 +1,6 @@
 'use strict';
 const express = require(`express`);
+const helmet = require(`helmet`);
 const path = require(`path`);
 const {mainRouter} = require(`./routes/main-routes`);
 const {getLogger} = require(`../service/lib/logger`);
@@ -33,6 +34,14 @@ app.use((err, _req, res, _next) => {
 
 app.set(`views`, path.resolve(TEMPLATES_DIR));
 app.set(`view engine`, `pug`);
+
+app.use(helmet.xssFilter());
+app.use(helmet.contentSecurityPolicy({
+  directive: {
+    defaultSrc: [`'self'`],
+    scriptSrc: [`'self'`],
+  },
+}));
 
 app.listen(port,
     () => logger.info(`Сервер запущен на порту: ${port}`));
