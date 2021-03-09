@@ -12,8 +12,7 @@
     "server": "nodemon ./src/service/service.js --server",
     "start-front-server": "node -r dotenv/config ./src/express/index.js",
     "generate": "node ./src/service/service.js --generate",
-    "jest": "jest",
-    "initdb": "node -r dotenv/config ./src/service/db-service/init-db.js"
+    "jest": "jest"
   },
   "repository": {
     "type": "git",
@@ -50,7 +49,8 @@
     "pg": "8.5.1",
     "pino": "6.7.0",
     "pug": "3.0.2",
-    "sequelize": "6.3.5"
+    "sequelize": "6.3.5",
+    "sequelize-cli": "6.2.0"
   },
   "nodemonConfig": {
     "watch": [

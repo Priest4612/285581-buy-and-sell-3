@@ -1,8 +1,9 @@
 'use strict';
+const Alias = require(`../alias`);
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable(`pictures`, {
+    await queryInterface.createTable(Alias.PICTURES, {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,6 +17,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, _Sequelize) => {
-    await queryInterface.dropTable(`pictures`);
+    await queryInterface.dropTable(Alias.PICTURES);
   }
 };
