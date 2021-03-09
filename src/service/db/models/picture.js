@@ -1,23 +1,25 @@
 'use strict';
-
-const Alias = require(`../alias`);
+const {Model} = require(`sequelize`);
 
 module.exports = (sequelize, DataTypes) => {
-  const Picture = sequelize.define(`Picture`, {
+  class Picture extends Model {
+
+    static associate(models) {
+      // define association here
+    }
+  }
+
+  Picture.init({
     path: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   }, {
     sequelize,
+    modelName: `Picture`,
     tableName: `pictures`,
     timestamps: false,
     paranoid: false,
   });
-
-  Picture.associate = (models) => {
-    Picture.belongsTo(models.Offer, {as: Alias.OFFERS, foreignKey: `offerId`});
-  };
-
   return Picture;
 };

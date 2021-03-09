@@ -1,9 +1,16 @@
 'use strict';
-
-const Alias = require(`../alias`);
-
+const {
+  Model
+} = require(`sequelize`);
 module.exports = (sequelize, DataTypes) => {
-  const Category = sequelize.define(`Category`, {
+  class Category extends Model {
+
+    static associate(models) {
+      // define association here
+    }
+  }
+
+  Category.init({
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -14,15 +21,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
+    modelName: `Category`,
     tableName: `categories`,
     timestamps: false,
     paranoid: false,
   });
-
-  Category.associate = (models) => {
-    Category.belongsToMany(models.Offer, {through: models.OfferToCategory, as: Alias.OFFERS, foreignKey: `categoryId`});
-    Category.hasMany(models.OfferToCategory, {as: Alias.OFFER_TO_CATEGORIES, foreignKey: `categoryId`});
-  };
-
   return Category;
 };

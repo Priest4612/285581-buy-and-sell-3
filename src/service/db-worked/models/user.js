@@ -1,15 +1,9 @@
 'use strict';
-const {Model} = require(`sequelize`);
+
+const Alias = require(`../alias`);
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-
-    static associate(models) {
-      // define association here
-    }
-  }
-
-  User.init({
+  const User = sequelize.define(`User`, {
     firstname: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -36,11 +30,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: `User`,
     tableName: `users`,
     timestamps: false,
     paranoid: false,
   });
+
+  User.associate = (models) => {
+    User.hasMany(models.Offer, {as: Alias.OFFERS, foreignKey: `userId`});
+    User.hasMany(models.Comment, {as: Alias.COMMENTS, foreignKey: `userId`});
+  };
 
   return User;
 };

@@ -1,0 +1,14 @@
+'use strict';
+
+const path = require(`path`);
+const {
+  PROJECT_DIR,
+  SERVICE_FOLDER,
+} = require(`./settings`);
+
+module.exports = {
+  'config': path.resolve(PROJECT_DIR, `config`, `database.js`),
+  'models-path': path.resolve(SERVICE_FOLDER, `db`, `models`),
+  'seeders-path': path.resolve(SERVICE_FOLDER, `db`, `seeders`),
+  'migrations-path': path.resolve(SERVICE_FOLDER, `db`, `migrations`)
+};
