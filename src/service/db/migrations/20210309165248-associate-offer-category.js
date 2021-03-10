@@ -3,26 +3,43 @@ const Alias = require(`../alias`);
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
-    return queryInterface.createTable(Alias.OFFER_TO_CATEGORIES, {
-      offerId: {
-        type: Sequelize.INTEGER,
-        primaryKey: false,
-      },
-      categoryId: {
-        type: Sequelize.INTEGER,
-        primaryKey: false,
-      },
+    return queryInterface.addColumn(
+        Alias.OFFER_TO_CATEGORIES,
+        `offerId`,
+        {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          references: {
+            model: Alias.OFFERS,
+            key: `id`
+          },
+        },
+    )
+    .then(() => {
+      return queryInterface.addColumn(
+          Alias.OFFER_TO_CATEGORIES,
+          `categoryId`,
+          {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            references: {
+              model: Alias.CATEGORIES,
+              key: `id`
+            },
+          },
+      );
     });
   },
-
-
   down: async (queryInterface, _Sequelize) => {
-    await queryInterface.dropTable(Alias.OFFER_TO_CATEGORIES);
+    return queryInterface.removeColumn(
+        Alias.OFFER_TO_CATEGORIES,
+        `offerId`,
+    )
+    .then(() => {
+      return queryInterface.removeColumn(
+          Alias.OFFER_TO_CATEGORIES,
+          `categoryId`,
+      );
+    });
   }
 };

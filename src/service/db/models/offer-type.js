@@ -6,7 +6,6 @@ const Alias = require(`../alias`);
 module.exports = (sequelize, DataTypes) => {
   class OfferType extends Model {
     static associate(models) {
-      // define association here
       OfferType.hasMany(models.Offer, {as: Alias.OFFERS, foreignKey: `offerTypeId`});
     }
   }
