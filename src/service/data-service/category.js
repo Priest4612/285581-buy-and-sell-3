@@ -1,7 +1,7 @@
 'use strict';
 
 const Sequelize = require(`sequelize`);
-const Alias = require(`../models/alias`);
+const Alias = require(`../db/alias`);
 
 class CategoryService {
   constructor(sequelize) {

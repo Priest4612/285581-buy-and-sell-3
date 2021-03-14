@@ -13,11 +13,9 @@ const {
   CommentService,
 } = require(`../data-service`);
 
-const {sequelize} = require(`../lib/sequelize`);
-const defineModels = require(`../models`);
+const {sequelize} = require(`../db/models`);
 
 const app = new Router();
-defineModels(sequelize);
 
 (() => {
   categoryRouter(app, new CategoryService(sequelize));

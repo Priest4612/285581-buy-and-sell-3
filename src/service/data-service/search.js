@@ -1,7 +1,7 @@
 'use strict';
 
 const {Op} = require(`sequelize`);
-const Alias = require(`../models/alias`);
+const Alias = require(`../db/alias`);
 
 class SearchService {
   constructor(sequelize) {

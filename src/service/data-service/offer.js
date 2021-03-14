@@ -1,6 +1,6 @@
 'use strict';
 
-const Alias = require(`../models/alias`);
+const Alias = require(`../db/alias`);
 const {Op} = require(`sequelize`);
 
 class OfferService {
